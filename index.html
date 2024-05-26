@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYC Property Sales</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Actor&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Actor&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <div class="body-background">
+        <header class="main-header">
+            <div class="overlay">
+                <div class="header-logo">
+                    <img class="msib" src="assets/logo/msib.png" alt="">
+                    <img class="km" src="assets/logo/km.png" alt="">
+                    <img class="revou" src="assets/logo/revou.png" alt="">
+                </div>
+                <div class="header-title">
+                    <h1>New York City</h1>
+                    <p>Property Sales</p>
+                </div>
+                <nav class="header-nav">
+                    <nav class="nav-list">
+                        <div class="nav-item"><a href="#dashboard">Dashboard</a></div>
+                        <div class="nav-item"><a href="#lineChart">Line Chart</a></div>
+                        <div class="nav-item"><a href="#pieChart">Pie Chart</a></div>
+                        <div class="nav-item"><a href="#tableChart">Table</a></div>
+                        <div class="nav-item"><a href="#unitsLineChart">Units Line Chart</a></div>
+                        <div class="nav-item"><a href="#barChart">Bar Chart</a></div>
+                        <div class="nav-item"><a href="#ourteams">Our Teams</a></div>
+                        <div class="nav-item"><a href="#contact">Contact</a></div>
+                    </nav>
+                </nav>
+            </div>
+        </header>
+
+        <section class="main-section">
+            <div class="dashboard" id="dashboard">
+                <div class="recordcount">
+                    <span>Record Count <br> </span>
+                    <span id="recordCountValue">0</span>
+                </div>
+                <div class="filter">
+                    <select id="boroughFilter">
+                        <option value="">All Borough</option>
+                    </select>
+
+                    <select id="neighborhoodFilter">
+                        <option value="">All Neighborhood</option>
+                    </select>
+
+                    <select id="buildingClassFilter">
+                        <option value="">All Building Class Category</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="grafik-section">
+                <div id="mainContent">
+                    <div class="chart-container">
+                        <div class="lineChart">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <div class="table-container">
+                            <div class="pieChart">
+                                <canvas id="pieChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <div class="tableChart">
+                                <table id="tableChart">
+                                    <thead>
+                                        <tr>
+                                            <th>NEIGHBORHOOD</th>
+                                            <th>Record Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <br>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="unitsLineChart">
+                            <canvas id="unitsLineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="barChart">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+    <div class="member-team" id="ourteams">
+        <div class="wrapper">
+            <h2 class="executive-team">Member Team 10</h2>
+            <hr class="hr-team">
+            <div class="members">
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member1.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Garong</h4>
+                    <p class="h4-team-member">Jungler</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member2.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Kampung</h4>
+                    <p class="h4-team-member">Tank</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member3.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Anggora</h4>
+                    <p class="h4-team-member">Support</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member1.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member2.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member3.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <br>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member4.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member3.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member2.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member1.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member2.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member3.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+                <div class="team-mem">
+                    <img class="image-member" src="assets/images/member4.png" alt="member1">
+                    <h4 class="h4-team-member">Kucing Persia</h4>
+                    <p class="h4-team-member">Explanner</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+    <footer>
+        <div class="background">
+            <div class="container">
+                <p class="upskill">
+                    DATA VISUALIZATION NYC PROPERTY SALES
+                </p>
+                <p class="req">
+                    New York City Property
+                </p>
+                <p class="visual">
+                    Visualisasi Data Penjualan Properti di NYC pada September
+                    <br>
+                    2016 sampai Agustus 2017
+                </p>
+                <div class="button">
+                    <a href="https://www.kaggle.com/datasets/new-york-city/nyc-property-sales?resource=download"
+                        target="_blank">
+                        <button>
+                            Dataset
+                        </button>
+                    </a>
+                </div>
+                <p class="cr">
+                    © 2024 Section Jakarta Team 10, RevoU
+                </p>
+                <div class="line"></div>
+                <div class="footer" id="contact">
+                    <div class="footer-img">
+                        <img class="revou" src="assets/logo/revou.png" alt="">
+                        <img class="km" src="assets/logo/km-bgputih.jpg" alt="">
+                        <img class="msib" src="assets/logo/msib-bgputih.jpg" alt="">
+                    </div>
+                    <div class="footer-p">
+                        <a href="" style="text-decoration:none">
+                            Team
+                        </a>
+                        <a href="https://docs.google.com/document/d/17A_aYQYxya-PB2wJOPK6MMWekYTzNqgzPAdVFkcVEMQ/edit#heading=h.aauvph48x66m"
+                            style="text-decoration:none">
+                            Case Studies
+                        </a>
+                        <a href="https://lookerstudio.google.com/u/0/reporting/cbbf70c2-94b8-4cae-a3b2-eebbf752803e/page/sDNxD"
+                            style="text-decoration:none">
+                            Visualisations
+                        </a>
+                    </div>
+                    <div class="footer-icon">
+                        <a href="https://www.linkedin.com/feed/">
+                            <img src="assets/logo/linkedin.png" alt="Linkedin">
+                        </a>
+                        <a href="https://www.facebook.com/revoU.co/">
+                            <img src="assets/logo/Facebook.png" alt="Facebook">
+                        </a>
+                        <a href="https://www.instagram.com/revou_id/">
+                            <img src="assets/logo/Instagram.png" alt="Instagram">
+                        </a>
+                        <a href="https://www.youtube.com/channel/UCJOIqOSZ7_2C_vgBBQiB6Uw">
+                            <img src="assets/logo/Youtube.png" alt="Youtube">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
