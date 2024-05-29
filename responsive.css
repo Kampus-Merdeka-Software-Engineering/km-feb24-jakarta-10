@@ -1,5 +1,5 @@
 /**Responsive**/
-@media screen and (max-width: 768px) {
+@media only screen and (min-width: 576px) and (max-width: 991px) {
     header {
         background-image: url('assets/images/nyc.jpg');
         background-position: center;
@@ -120,7 +120,7 @@
     }
 }
 
-@media screen and (max-width: 481px) {
+@media only screen and (max-width: 575px) {
     header {
         background-image: url('assets/images/nyc.jpg');
         background-position: top;
@@ -128,6 +128,12 @@
         height: 250px;
         width: 100%;
         position: relative;
+    }
+
+    /* ini */
+    .header-logo {
+        padding-top: 10px;
+        padding-right: 15px;
     }
 
     .revou {
@@ -147,10 +153,11 @@
         margin-top: 20px;
     }
 
+    /* ini */
     header h1 {
-        font-size: 2em;
+        font-size: 1.8em;
         border-bottom: 3px solid #ffff;
-        padding-bottom: 5px;
+        padding-bottom: 14px;
         width: 60%;
         text-shadow:
             -3px -3px 0 navy,
@@ -169,24 +176,48 @@
             1px 1px 0 #0a142f;
     }
 
+    /* ini */
     .nav-list {
         display: flex;
-        justify-content: center;
-        gap: 25px;
-        font-size: 10px;
+        justify-content: space-around;
     }
 
+    .nav-item a{
+        font-size: 8px;
+    }
+
+
+    /* ini */
     .dashboard {
         display: flex;
+        flex-direction: column;
         justify-content: right;
-        gap: 30px;
+        gap: 15px;
         align-items: center;
     }
 
+    /* ini */
     .filter {
         display: flex;
         justify-content: right;
-        gap: 20px;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    /* ini */
+    #boroughFilter{
+        width: 80px;
+    }
+
+    /* ini */
+    #neighborhoodFilter {
+        width: 100px;
+    }
+
+    /* ini */
+
+    #buildingClassFilter{
+        width: 135px;
     }
 
     .recordcount {
@@ -218,6 +249,18 @@
     .row-container {
         display: flex;
         justify-content: center;
+    }
+
+    /* ini */
+
+    .table-container {
+        max-width: 100%;
+    }
+
+
+    /* ini */
+    #tableChart {
+        width: 100%;
     }
 
     .container {
@@ -282,12 +325,16 @@
         margin-bottom: 32px;
     }
 
+
+    /* ini */
     .footer {
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: 20px 0;
+        gap: 15px;
+        padding: 0;
     }
 
     .footer-img {
