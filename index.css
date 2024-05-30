@@ -1,7 +1,12 @@
 .body-background {
     margin: 0;
     background-color: rgb(203, 203, 203);
-    font-family: "Libre Baskerville", serif;
+    font-family: 'Libre Baskerville', serif;
+}
+
+/* ini */
+body {
+    margin: 0;
 }
 
 /**header**/
@@ -40,7 +45,6 @@ header {
 .km,
 .msib {
     width: 80px;
-
 }
 
 .header-title {
@@ -53,22 +57,13 @@ header h1 {
     justify-content: center;
     line-height: 1px;
     padding-bottom: 20px;
-    text-shadow:
-        -3px -3px 0 navy,
-        3px -3px 0 navy,
-        -3px 3px 0 navy,
-        3px 3px 0 navy;
-
+    text-shadow: -3px -3px 0 navy, 3px -3px 0 navy, -3px 3px 0 navy, 3px 3px 0 navy;
 }
 
 header p {
     font-size: 2em;
     line-height: 1px;
-    text-shadow:
-        -2px -2px 0 #0a142f,
-        2px -2px 0 #0a142f,
-        -2px 2px 0 #0a142f,
-        2px 2px 0 #0a142f;
+    text-shadow: -2px -2px 0 #0a142f, 2px -2px 0 #0a142f, -2px 2px 0 #0a142f, 2px 2px 0 #0a142f;
 }
 
 .header-nav {
@@ -84,12 +79,12 @@ header p {
 
 .nav-list {
     display: flex;
-    justify-content: center;
-    gap: 80px;
-    font-size: 1em;
+    justify-content: space-around;
+    font-size: 20px;
 }
 
 .nav-item a {
+    font-size: 15px;
     color: #ffff;
     text-decoration: none;
 }
@@ -113,6 +108,11 @@ header p {
 .dashboard {
     display: flex;
     justify-content: space-between;
+    margin: 20px;
+}
+
+#dashboard {
+    scroll-margin-top: 100px;
 }
 
 .recordcount {
@@ -130,29 +130,40 @@ header p {
 
 .filter {
     justify-content: right;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.filter label {
-    margin-right: 5px;
+    display: flex;
+    gap: 30px;
+    height: 35px;
 }
 
 .filter select {
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 8px;
+    border: 1px solid #0a142f;
+}
+
+#boroughFilter {
+    width: 110px;
+}
+
+#neighborhoodFilter {
+    width: 140px;
+}
+
+#buildingClassFilter {
+    width: 200px;
 }
 
 .row-container {
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
+    justify-content: center;
 }
 
 .chart-container {
     background-color: #0a142f;
     border-radius: 10px;
-    padding: 10px;
+    padding: 20px;
     color: #ffffff;
     margin-bottom: 20px;
     display: flex;
@@ -171,40 +182,31 @@ header p {
     padding-bottom: 20px;
 }
 
-.lineChart {
-    width: 100%;
-
-}
-
+.lineChart,
 .unitsLineChart {
     width: 100%;
+    height: 400px;
 }
 
 .barChart {
     width: 100%;
+    height: 450px;
 }
 
-#lineChart {
+#lineChart,
+#unitsLineChart {
     max-height: 400px;
     scroll-margin-top: 100px;
 }
 
 #pieChart {
-    max-height: 400px;
+    height: 470px;
     scroll-margin-top: 100px;
-
 }
 
 #barChart {
-    max-height: 400px;
-    scroll-margin-top: 100px;
-
-}
-
-#unitsLineChart {
-    max-height: 400px;
-    scroll-margin-top: 100px;
-
+    max-height: 450px;
+    scroll-margin-top: 10px;
 }
 
 #tableChart {
@@ -217,15 +219,6 @@ header p {
     border-collapse: collapse;
     scroll-margin-top: 100px;
 }
-
-.chart-container .chart-title {
-    color: #ffffff;
-}
-
-.chart-container .chart-legend {
-    color: #ffffff;
-}
-
 
 
 .custom-table {
@@ -258,6 +251,7 @@ header p {
     justify-content: center;
     align-items: center;
     margin-top: 10px;
+    flex-wrap: wrap;
 }
 
 .pagination-button {
@@ -266,20 +260,20 @@ header p {
     border: none;
     cursor: pointer;
     padding: 5px 10px;
-    margin: 0 5px;
+    margin: 5px;
     border-radius: 5px;
+    flex: 1 1 auto;
+    max-width: 100px;
 }
 
 .pagination-button:disabled {
-    background-color: #4a4a4a;
     cursor: not-allowed;
 }
 
 .pagination-container span {
-    margin: 0 10px;
+    margin: 5px;
     color: #ffffff;
 }
-
 
 /**Our teams**/
 .member-team {
@@ -353,11 +347,13 @@ header p {
 
 .req {
     font-family: "Libre Baskerville", serif;
+    font-size: 50px;
     color: #ffff;
     margin-bottom: 20px;
 }
 
 .visual {
+
     text-align: center;
     width: 100%;
     font-family: "Actor", sans-serif;
@@ -380,6 +376,10 @@ header p {
     margin-bottom: 50px;
 }
 
+.button button:hover {
+    background-color: #4ea7ff;
+}
+
 .cr {
     font-family: "Actor", sans-serif;
     font-size: 16px;
@@ -391,6 +391,7 @@ header p {
 .line {
     border: 1px solid #fff;
     opacity: 0.2;
+    margin-bottom: 32px;
 }
 
 .footer {
@@ -411,7 +412,7 @@ header p {
 .footer-p {
     display: flex;
     gap: 30px;
-    font-family: "Actor", sans-serif;
+    font-family: 'Actor', sans-serif;
     font-size: 16px;
     color: #fff;
 }

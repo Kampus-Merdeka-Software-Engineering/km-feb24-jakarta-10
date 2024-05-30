@@ -49,19 +49,19 @@
         <section class="main-section">
             <div class="dashboard" id="dashboard">
                 <div class="recordcount">
-                    <span>Record Count <br> </span>
-                    <span id="recordCountValue">0</span>
+                    <span class="text">Record Count <br> </span>
+                    <span class="value" id="recordCountValue">0</span>
                 </div>
                 <div class="filter">
-                    <select id="boroughFilter">
+                    <select id="boroughFilter" name="boroughFilter">
                         <option value="">All Borough</option>
                     </select>
 
-                    <select id="neighborhoodFilter">
+                    <select id="neighborhoodFilter" name="neighborhoodFilter">
                         <option value="">All Neighborhood</option>
                     </select>
 
-                    <select id="buildingClassFilter">
+                    <select id="buildingClassFilter" name="buildingClassFilter">
                         <option value="">All Building Class Category</option>
                     </select>
                 </div>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="table-container">
                             <div class="tableChart">
-                                <table id="tableChart">
+                                <table id="tableChart" class="custom-table">
                                     <thead>
                                         <tr>
                                             <th>NEIGHBORHOOD</th>
@@ -93,6 +93,13 @@
                                     </tbody>
                                     <br>
                                 </table>
+                                <div id="pagination-container" class="pagination-container">
+                                    <button id="prev-button" class="pagination-button"><i
+                                            class="fas fa-chevron-left"></i></button>
+                                    <span id="page-label"></span>
+                                    <button id="next-button" class="pagination-button"><i
+                                            class="fas fa-chevron-right"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>

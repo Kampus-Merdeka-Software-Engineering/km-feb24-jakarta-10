@@ -1,10 +1,9 @@
 /**Responsive**/
-@media screen and (max-width: 768px) {
+@media only screen and (min-width: 576px) and (max-width: 1105px) {
     header {
-        background-image: url('assets/images/nyc.jpg');
         background-position: center;
         background-size: cover;
-        height: 200px;
+        height: 240px;
         width: 100%;
         position: relative;
     }
@@ -23,111 +22,9 @@
         flex-direction: row;
         justify-content: flex-end;
         display: flex;
-        gap: 30px;
+        gap: 20px;
         padding-top: 10px;
         padding-right: 20px;
-    }
-
-    .revou {
-        width: 45px;
-    }
-
-    .km,
-    .msib {
-        width: 70px;
-
-    }
-
-    .header-title {
-        text-align: center;
-        color: #ffff;
-    }
-
-    header h1 {
-        font-size: 2em;
-        justify-content: center;
-        line-height: 1px;
-        padding-bottom: 20px;
-        text-shadow:
-            -3px -3px 0 navy,
-            3px -3px 0 navy,
-            -3px 3px 0 navy,
-            3px 3px 0 navy;
-    }
-
-    header p {
-        font-size: 1em;
-        line-height: 1px;
-        text-shadow:
-            -2px -2px 0 #0a142f,
-            2px -2px 0 #0a142f,
-            -2px 2px 0 #0a142f,
-            2px 2px 0 #0a142f;
-    }
-
-    .nav-list {
-        display: flex;
-        justify-content: center;
-        gap: 25px;
-        font-size: 15px;
-    }
-
-    .row-container {
-        display: flex;
-        justify-content: center;
-    }
-
-    .pieChart {
-        width: 500px;
-    }
-
-    .footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        padding: 10px 0;
-    }
-
-    .footer-img {
-        flex: 1;
-        display: flex;
-        justify-content: flex-start;
-        margin-left: 0;
-        padding-left: 0;
-    }
-
-    .footer-p {
-        display: flex;
-        flex: 2;
-        justify-content: center;
-        gap: 45px;
-        font-family: "Actor", sans-serif;
-        font-size: 16px;
-        color: #fff;
-    }
-
-    .footer-p a {
-        color: inherit;
-        text-decoration: none;
-    }
-
-    .footer-icon {
-        display: flex;
-        flex: 1;
-        justify-content: flex-end;
-        gap: 25px;
-    }
-}
-
-@media screen and (max-width: 481px) {
-    header {
-        background-image: url('assets/images/nyc.jpg');
-        background-position: top;
-        background-size: cover;
-        height: 250px;
-        width: 100%;
-        position: relative;
     }
 
     .revou {
@@ -137,87 +34,132 @@
     .km,
     .msib {
         width: 60px;
-
+        height: 40px;
     }
 
     .header-title {
-        text-align: left;
+        text-align: center;
         color: #ffff;
-        margin-left: 50px;
-        margin-top: 20px;
     }
 
     header h1 {
-        font-size: 2em;
-        border-bottom: 3px solid #ffff;
-        padding-bottom: 5px;
-        width: 60%;
-        text-shadow:
-            -3px -3px 0 navy,
-            3px -3px 0 navy,
-            -3px 3px 0 navy,
-            3px 3px 0 navy;
+        font-size: 3em;
+        justify-content: center;
+        line-height: 1px;
+        padding-bottom: 20px;
+        text-shadow: -3px -3px 0 navy, 3px -3px 0 navy, -3px 3px 0 navy, 3px 3px 0 navy;
     }
 
     header p {
-        font-size: 25px;
+        font-size: 2em;
         line-height: 1px;
-        text-shadow:
-            -1px -1px 0 #0a142f,
-            1px -1px 0 #0a142f,
-            -1px 1px 0 #0a142f,
-            1px 1px 0 #0a142f;
+        text-shadow: -2px -2px 0 #0a142f, 2px -2px 0 #0a142f, -2px 2px 0 #0a142f, 2px 2px 0 #0a142f;
+    }
+
+    .header-nav {
+        background-color: rgba(6, 6, 50, 0.596);
+        color: #ffff;
+        padding-top: 5px;
+        padding-bottom: 10px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
 
     .nav-list {
         display: flex;
-        justify-content: center;
-        gap: 25px;
+        justify-content: space-around;
+    }
+
+    .nav-item a {
+        color: #ffff;
         font-size: 10px;
+        text-decoration: none;
+    }
+
+    .nav-item a:hover {
+        color: #0a142f;
+        background-color: #ffff;
+        padding: 5px;
+        border-radius: 10px;
+    }
+
+    .table-container {
+        max-width: 100%;
+    }
+
+    .chart-container {
+        max-width: 100%;
+    }
+
+    .row-container {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
     }
 
     .dashboard {
         display: flex;
+        flex-direction: column;
         justify-content: right;
-        gap: 30px;
+        gap: 15px;
         align-items: center;
     }
 
     .filter {
         display: flex;
         justify-content: right;
-        gap: 20px;
+        gap: 10px;
+        margin-bottom: 0;
     }
 
-    .recordcount {
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-top: 10px;
+    #boroughFilter {
         width: 120px;
-        height: 50px;
-        background-color: #f0f0f0;
-        color: #0a142f;
-        border: 2px solid #0a142f;
-        text-align: center;
-        border-radius: 10px;
     }
 
-    .recordcount span {
+    #neighborhoodFilter {
+        width: 150px;
+    }
+
+    #buildingClassFilter {
+        width: 200px;
+    }
+
+    .custom-table tr {
+        font-size: 13px;
+    }
+
+    .custom-table td {
         font-size: 10px;
     }
 
-    .dashboard select {
-        background-color: #f0f0f0;
-        font-size: 8px;
-        height: 40px;
-        border-radius: 10px;
-        border: 2px solid #0a142f;
-        color: #0a142f;
+    .pagination-container {
+        flex-direction: row;
+        align-items: center;
+        font-size: 10px;
     }
 
-    .row-container {
-        display: flex;
-        justify-content: center;
+    .pagination-button {
+        width: 40px;
+    }
+
+    .pagination-container span {
+        margin-top: 10px;
+    }
+
+    .pagination-button i {
+        font-size: 10px;
+    }
+
+    .image-member {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 13px;
+    }
+
+    .background {
+        padding: 40px 40px;
     }
 
     .container {
@@ -225,36 +167,32 @@
     }
 
     .upskill {
-        font-family: "Actor", sans-serif;
-        font-size: 18px;
+        font-size: 10px;
         font-weight: bold;
-        color: #ffff;
-        opacity: 0.6;
-        letter-spacing: 2.8px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .req {
         font-family: "Libre Baskerville", serif;
-        font-size: 50px;
         color: #ffff;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        font-size: 35px;
     }
 
     .visual {
         text-align: center;
         width: 100%;
         font-family: "Actor", sans-serif;
-        font-size: 22px;
+        font-size: 15px;
         color: #ffff;
         opacity: 0.8;
-        line-height: 1.83;
+        line-height: 1.8;
         margin-bottom: 45px;
     }
 
     .button button {
         font-family: "Actor", sans-serif;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 500px;
         color: #ffff;
         border: none;
@@ -284,10 +222,12 @@
 
     .footer {
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: 20px 0;
+        gap: 15px;
+        padding: 0;
     }
 
     .footer-img {
@@ -296,6 +236,293 @@
         justify-content: flex-start;
         margin-left: 0;
         padding-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .footer-p {
+        display: flex;
+        flex: 2;
+        justify-content: center;
+        gap: 45px;
+        font-family: "Actor", sans-serif;
+        font-size: 16px;
+        color: #fff;
+    }
+
+    .footer-p a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .footer-icon {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+        gap: 25px;
+    }
+}
+
+
+
+@media only screen and (max-width: 575px) {
+    header {
+        height: 150px;
+    }
+
+    .header-logo {
+        display: flex;
+        gap: 10px;
+        padding-top: 10px;
+        padding-right: 20px;
+    }
+
+    .revou {
+        width: 30px;
+        height: 30px;
+    }
+
+    .km,
+    .msib {
+        width: 50px;
+    }
+
+    header h1 {
+        font-size: 1em;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-shadow: -2px -2px 0 navy, 2px -2px 0 navy, -2px 2px 0 navy, 2px 2px 0 navy;
+    }
+
+    header p {
+        font-size: 15px;
+        text-shadow: -1px -1px 0 #0a142f, 1px -1px 0 #0a142f, -1px 1px 0 #0a142f, 1px 1px 0 #0a142f;
+    }
+
+    .header-nav {
+        height: 20px;
+        padding-top: 0;
+    }
+
+    .nav-list {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .nav-item a {
+        font-size: 9px;
+        color: #ffff;
+        text-decoration: none;
+    }
+
+    .nav-item a:hover {
+        color: #0a142f;
+        background-color: #ffff;
+        padding: 5px;
+        border-radius: 10px;
+    }
+
+    .main-section {
+        margin: 0;
+    }
+
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        justify-content: right;
+        gap: 15px;
+        align-items: center;
+        margin-bottom: 0;
+    }
+
+    .filter {
+        display: flex;
+        justify-content: right;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    #boroughFilter {
+        width: 100px;
+    }
+
+    #neighborhoodFilter {
+        width: 120px;
+    }
+
+    #buildingClassFilter {
+        width: 160px;
+    }
+
+    .recordcount {
+        width: 120px;
+        padding-top: 8px;
+        height: 50px;
+        background-color: #f0f0f0;
+        color: #0a142f;
+        border: 2px solid #0a142f;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .text {
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .value {
+        font-size: 13px
+    }
+
+    .dashboard select {
+        background-color: #f0f0f0;
+        font-size: 10px;
+        border-radius: 10px;
+        border: 2px solid #0a142f;
+        color: #0a142f;
+
+    }
+
+    .row-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .table-container {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .chart-container {
+        max-width: 100%;
+        margin-top: 0;
+    }
+
+    .pieChart {
+        height: 400px;
+    }
+
+    #tableChart {
+        width: 300px;
+    }
+
+
+    .custom-table tr {
+        font-size: 13px;
+    }
+
+    .custom-table td {
+        font-size: 10px;
+    }
+
+    .pagination-container {
+        flex-direction: row;
+        align-items: center;
+        font-size: 10px;
+    }
+
+    .pagination-button {
+        width: 40px;
+    }
+
+    .pagination-container span {
+        margin-top: 10px;
+    }
+
+    .pagination-button i {
+        font-size: 10px;
+    }
+
+    .image-member {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin: 13px;
+    }
+
+
+
+    .background {
+        padding: 20px 20px;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .upskill {
+        font-size: 10px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .req {
+        font-family: "Libre Baskerville", serif;
+        color: #ffff;
+        margin-bottom: 10px;
+        font-size: 35px;
+    }
+
+    .visual {
+        text-align: center;
+        width: 100%;
+        font-family: "Actor", sans-serif;
+        font-size: 15px;
+        color: #ffff;
+        opacity: 0.8;
+        line-height: 1.8;
+        margin-bottom: 45px;
+    }
+
+    .button button {
+        font-family: "Actor", sans-serif;
+        font-size: 15px;
+        font-weight: 500px;
+        color: #ffff;
+        border: none;
+        padding: 20px 60px;
+        border-radius: 30px;
+        background-color: #0081fe;
+        margin-bottom: 50px;
+    }
+
+    .button button:hover {
+        background-color: #4ea7ff;
+    }
+
+    .cr {
+        font-family: "Actor", sans-serif;
+        font-size: 16px;
+        color: #ffff;
+        opacity: 0.7;
+        margin-bottom: 50px;
+    }
+
+    .line {
+        border: 1px solid #fff;
+        opacity: 0.2;
+        margin-bottom: 32px;
+    }
+
+
+    /* ini */
+    .footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 15px;
+        padding: 0;
+    }
+
+    .footer-img {
+        flex: 1;
+        display: flex;
+        justify-content: flex-start;
+        margin-left: 0;
+        padding-left: 0;
+        margin-bottom: 10px;
     }
 
     .footer-p {

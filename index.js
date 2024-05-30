@@ -2,7 +2,7 @@ let rawData = null;
 const currentFilters = {
     borough: '',
     neighborhood: '',
-    buildingClass: ''
+    buildingClass: '',
 };
 let lineChart = null;
 let barChart = null;
@@ -10,30 +10,32 @@ let pieChart = null;
 let unitsLineChart = null;
 let tableChart = null;
 
-fetch('https://raw.githubusercontent.com/Ari050/NYCdataset/main/NYC.json')
+fetch('https://raw.githubusercontent.com/Team10Jakarta/Project-SE/main/NYC%20DATASET.json')
     .then(response => response.json())
     .then(data => {
         rawData = data;
         populateFilters(rawData);
-        updateRecordCount(rawData);
         filter(rawData);
     })
     .catch(error => console.error('Error fetching data:', error));
 
-function updateRecordCount(data) {
-    const recordCountValue = document.getElementById('recordCountValue');
-    recordCountValue.textContent = data.length;
-}
 
 function filter(data) {
     const salesData = processData(data, currentFilters);
-    updateRecordCount(data);
+    const recordCountElement = document.getElementById('recordCountValue');
+    const totalSales = salesData.tableData.reduce((total, neighborhood) => total + neighborhood.totalSales, 0);
+    recordCountElement.textContent = totalSales;
 
     createLineChart('lineChart', salesData.lineData);
     createPriceRangePieChart('pieChart', salesData.priceRangeData);
     createUnitsLineChart('unitsLineChart', salesData);
     createBarChart('barChart', salesData.barData);
     createTableChart('tableChart', salesData.tableData);
+}
+
+function updateRecordCount(count) {
+    const recordCountValue = document.getElementById('recordCountValue');
+    recordCountValue.textContent = count;
 }
 
 function populateFilters(data) {
@@ -119,7 +121,7 @@ function processData(data) {
         const category = item.BUILDING_CLASS_CATEGORY;
         const saleDate = new Date(item.SALE_DATE);
         const salePrice = parseFloat(item.SALE_PRICE);
-        const monthYear = `${saleDate.getFullYear()}-${saleDate.getMonth() + 1}`;
+        const monthYear = `${saleDate.getFullYear()}-${String(saleDate.getMonth() + 1).padStart(2, '0')}`;
         const resUnits = parseInt(item.RESIDENTIAL_UNITS, 10) || 0;
         const comUnits = parseInt(item.COMMERCIAL_UNITS, 10) || 0;
 
@@ -173,7 +175,7 @@ function processData(data) {
     // Prepare data for Total Sales in Each Borough by Month (Chart 1)
     const labels = Array.from(new Set(filteredData.map(item => {
         const saleDate = new Date(item.SALE_DATE);
-        return `${saleDate.getFullYear()}-${saleDate.getMonth() + 1}`;
+        return `${saleDate.getFullYear()}-${String(saleDate.getMonth() + 1).padStart(2, '0')}`;
     }))).sort();
 
     const lineDatasets = Object.keys(salesByBorough).map(borough => {
@@ -245,17 +247,60 @@ function processData(data) {
     return salesData;
 }
 
+function responsiveFontSize(chart) {
+    let width = chart.width;
+    let titleFontSize, legendFontSize, scalesFontSize;
+
+    if (width >= 576 && width <= 1105) {
+        titleFontSize = 16;
+        legendFontSize = 14;
+        scalesFontSize = 12;
+    } else if (width <= 575) {
+        titleFontSize = 15;
+        legendFontSize = 10;
+        scalesFontSize = 8;
+    } else {
+        titleFontSize = 20;
+        legendFontSize = 16;
+        scalesFontSize = 12;
+    }
+
+    if (chart.options.plugins.title.font) {
+        chart.options.plugins.title.font.size = titleFontSize;
+    } else {
+        chart.options.plugins.title.font = { size: titleFontSize };
+    }
+
+    if (chart.options.plugins.legend.labels.font) {
+        chart.options.plugins.legend.labels.font.size = legendFontSize;
+    } else {
+        chart.options.plugins.legend.labels.font = { size: legendFontSize };
+    }
+
+    if (chart.options.scales) {
+        if (chart.options.scales.x && chart.options.scales.x.ticks) {
+            if (chart.options.scales.x.ticks.font) {
+                chart.options.scales.x.ticks.font.size = scalesFontSize;
+            } else {
+                chart.options.scales.x.ticks.font = { size: scalesFontSize };
+            }
+        }
+
+        if (chart.options.scales.y && chart.options.scales.y.ticks) {
+            if (chart.options.scales.y.ticks.font) {
+                chart.options.scales.y.ticks.font.size = scalesFontSize;
+            } else {
+                chart.options.scales.y.ticks.font = { size: scalesFontSize };
+            }
+        }
+    }
+}
 
 function createLineChart(chartId, lineData) {
     if (lineChart) {
         lineChart.destroy();
     }
     const chartContainer = document.getElementById(chartId).parentNode;
-    const title = document.createElement('h3');
-    title.textContent = 'Total Sales in Each Borough by Month';
-    title.style.textAlign = 'center';
-    title.style.color = 'white';
-    chartContainer.insertBefore(title, chartContainer.firstChild);
 
     const ctx = document.getElementById(chartId).getContext('2d');
     lineChart = new Chart(ctx, {
@@ -263,16 +308,31 @@ function createLineChart(chartId, lineData) {
         data: lineData,
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
+                title: {
+                    display: true,
+                    text: 'Total Sales in Each Borough by Month',
+                    color: 'white',
+                    font: { size: 20 },
+                    padding: { top: 10, bottom: 30 }
+                },
                 legend: {
                     position: 'top',
-                    labels: {
-                        color: 'white'
-                    }
+                    labels: { color: 'white', font: { size: 16 } }
                 }
+            },
+            scales: {
+                x: { ticks: { color: 'white', font: { size: 14 } } },
+                y: { ticks: { color: 'white', font: { size: 14 } } }
+            },
+            onResize: (chart) => {
+                responsiveFontSize(chart);
+                chart.update();
             }
         }
     });
+    responsiveFontSize(lineChart);
 }
 
 function createBarChart(chartId, barData) {
@@ -280,11 +340,6 @@ function createBarChart(chartId, barData) {
         barChart.destroy();
     }
     const chartContainer = document.getElementById(chartId).parentNode;
-    const title = document.createElement('h3');
-    title.textContent = 'Total Sales by Building Class Category';
-    title.style.textAlign = 'center';
-    title.style.color = 'white';
-    chartContainer.insertBefore(title, chartContainer.firstChild);
 
     const ctx = document.getElementById(chartId).getContext('2d');
     barChart = new Chart(ctx, {
@@ -292,54 +347,63 @@ function createBarChart(chartId, barData) {
         data: barData,
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    display: false,
-                }
+                title: {
+                    display: true,
+                    text: 'Total Sales by Building Class Category',
+                    color: 'white',
+                    font: { size: 20 },
+                    padding: { top: 10, bottom: 30 }
+                },
+                legend: { display: false }
             },
             scales: {
-                x: {
-                    ticks: {
-                        color: 'white'
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: 'white'
-                    }
-                }
+                x: { ticks: { color: 'white', font: { size: 14 } } },
+                y: { ticks: { color: 'white', font: { size: 14 } } }
+            },
+            onResize: (chart) => {
+                responsiveFontSize(chart);
+                chart.update();
             }
         }
     });
+    responsiveFontSize(barChart);
 }
 
 function createPriceRangePieChart(chartId, priceRangeData) {
     if (pieChart) {
         pieChart.destroy();
     }
-    const chartContainer = document.getElementById(chartId).parentNode;
-    const title = document.createElement('h3');
-    title.textContent = 'Sales Distribution by Price Range';
-    title.style.textAlign = 'center';
-    title.style.color = 'white';
-    chartContainer.insertBefore(title, chartContainer.firstChild);
 
+    const chartContainer = document.getElementById(chartId).parentNode;
     const ctx = document.getElementById(chartId).getContext('2d');
     pieChart = new Chart(ctx, {
         type: 'pie',
         data: priceRangeData,
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
+                title: {
+                    display: true,
+                    text: 'Sales Distribution by Price Range',
+                    color: 'white',
+                    font: { size: 20 },
+                    padding: { top: 20, bottom: 30 }
+                },
                 legend: {
                     position: 'top',
-                    labels: {
-                        color: 'white'
-                    }
+                    labels: { color: 'white', font: { size: 16 } }
                 }
+            },
+            onResize: (chart) => {
+                responsiveFontSize(chart);
+                chart.update();
             }
         }
     });
+    responsiveFontSize(pieChart);
 }
 
 function createUnitsLineChart(chartId, salesData) {
@@ -347,11 +411,6 @@ function createUnitsLineChart(chartId, salesData) {
         unitsLineChart.destroy();
     }
     const chartContainer = document.getElementById(chartId).parentNode;
-    const title = document.createElement('h3');
-    title.textContent = 'Sales of Residential and Commercial Units by Month';
-    title.style.textAlign = 'center';
-    title.style.color = 'white';
-    chartContainer.insertBefore(title, chartContainer.firstChild);
 
     const ctx = document.getElementById(chartId).getContext('2d');
     unitsLineChart = new Chart(ctx, {
@@ -359,46 +418,54 @@ function createUnitsLineChart(chartId, salesData) {
         data: salesData.lineDatat,
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
+                title: {
+                    display: true,
+                    text: 'Sales of Residential and Commercial Units by Month',
+                    color: 'white',
+                    font: { size: 20 },
+                    padding: { top: 10, bottom: 30 }
+                },
                 legend: {
                     position: 'top',
-                    labels: {
-                        color: 'white'
-                    }
+                    labels: { color: 'white', font: { size: 16 } }
                 }
             },
             scales: {
-                x: {
-                    ticks: {
-                        color: 'white'
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: 'white'
-                    }
-                }
+                x: { ticks: { color: 'white', font: { size: 14 } } },
+                y: { ticks: { color: 'white', font: { size: 14 } } }
+            },
+            onResize: (chart) => {
+                responsiveFontSize(chart);
+                chart.update();
             }
         }
     });
+    responsiveFontSize(unitsLineChart);
 }
 
 function createTableChart(chartId, tableData) {
     if (tableChart) {
         tableChart.destroy();
     }
+
     // Sort the data by totalSales in descending order
     tableData.sort((a, b) => b.totalSales - a.totalSales);
 
-    // Create the title element
-    const title = document.createElement('h3');
-    title.textContent = 'Most Property Sales by Neighborhood';
-    title.style.textAlign = 'center';
-    title.style.color = 'white';
-
-    // Insert the title before the table
     const tableContainer = document.getElementById(chartId).parentNode;
-    tableContainer.insertBefore(title, tableContainer.firstChild);
+
+    // Check if the title already exists
+    let title = tableContainer.querySelector('h3');
+    if (!title) {
+        // Create the title element
+        title = document.createElement('h3');
+        title.textContent = 'Most Property Sales by Neighborhood';
+        title.style.textAlign = 'center';
+        title.style.color = 'white';
+        // Insert the title before the table
+        tableContainer.insertBefore(title, tableContainer.firstChild);
+    }
 
     const table = document.getElementById(chartId);
     let tbody = table.querySelector('tbody');
@@ -406,14 +473,9 @@ function createTableChart(chartId, tableData) {
         tbody = document.createElement('tbody');
         table.appendChild(tbody);
     }
-    table.classList.add('custom-table');
-    table.style.margin = 'auto';
-    table.style.fontSize = '14px';
-    table.style.borderCollapse = 'collapse';
+
     const rowsPerPage = 10;
     let currentIndex = 0;
-
-    displayTableData(tableData, tbody, currentIndex, rowsPerPage);
 
     function displayTableData(data, tbody, startIndex, rowsPerPage) {
         tbody.innerHTML = '';
@@ -426,49 +488,40 @@ function createTableChart(chartId, tableData) {
             `;
             tbody.appendChild(row);
         });
-        addPaginationButtons(data, tbody, startIndex, rowsPerPage);
+        updatePagination(data, startIndex, rowsPerPage);
     }
 
-    function addPaginationButtons(data, tbody, startIndex, rowsPerPage) {
-        const paginationContainer = document.querySelector('.pagination-container');
-        if (paginationContainer) {
-            paginationContainer.remove();
-        }
-
-        const newPaginationContainer = document.createElement('div');
-        newPaginationContainer.classList.add('pagination-container');
-        table.parentNode.appendChild(newPaginationContainer);
+    function updatePagination(data, startIndex, rowsPerPage) {
+        const paginationContainer = document.getElementById('pagination-container');
+        const pageLabel = document.getElementById('page-label');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
 
         const totalPages = Math.ceil(data.length / rowsPerPage);
         const currentPage = Math.floor(startIndex / rowsPerPage) + 1;
 
-        const pageLabel = document.createElement('span');
         pageLabel.textContent = `${startIndex + 1} - ${Math.min(startIndex + rowsPerPage, data.length)} / ${data.length}`;
-        newPaginationContainer.appendChild(pageLabel);
 
-        const prevButton = document.createElement('button');
-        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-        prevButton.classList.add('pagination-button');
         prevButton.disabled = startIndex === 0;
+        nextButton.disabled = startIndex + rowsPerPage >= data.length;
+
         prevButton.addEventListener('click', () => {
             const newIndex = Math.max(startIndex - rowsPerPage, 0);
             currentIndex = newIndex;
             displayTableData(data, tbody, newIndex, rowsPerPage);
         });
-        newPaginationContainer.appendChild(prevButton);
 
-        const nextButton = document.createElement('button');
-        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-        nextButton.classList.add('pagination-button');
-        nextButton.disabled = startIndex + rowsPerPage >= data.length;
         nextButton.addEventListener('click', () => {
             const newIndex = Math.min(startIndex + rowsPerPage, data.length - rowsPerPage);
             currentIndex = newIndex;
             displayTableData(data, tbody, newIndex, rowsPerPage);
         });
-        newPaginationContainer.appendChild(nextButton);
     }
+
+    displayTableData(tableData, tbody, currentIndex, rowsPerPage);
 }
+
+
 
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
