@@ -42,6 +42,7 @@
         color: #ffff;
     }
 
+    /* ini */
     header h1 {
         font-size: 3em;
         justify-content: center;
@@ -66,14 +67,15 @@
         width: 100%;
     }
 
+    /* ini */
     .nav-list {
         display: flex;
         justify-content: space-around;
+        font-size: 20px;
     }
 
     .nav-item a {
         color: #ffff;
-        font-size: 10px;
         text-decoration: none;
     }
 
@@ -96,6 +98,10 @@
         display: flex;
         justify-content: center;
         gap: 5px;
+    }
+
+    .nav-item a {
+        font-size: 12px;
     }
 
     .dashboard {
@@ -123,6 +129,10 @@
 
     #buildingClassFilter {
         width: 200px;
+    }
+
+    #tableChart {
+        width: 400px;
     }
 
     .custom-table tr {
@@ -160,6 +170,10 @@
 
     .background {
         padding: 40px 40px;
+    }
+
+    .table-container {
+        max-width: 100%;
     }
 
     .container {
@@ -219,6 +233,7 @@
         opacity: 0.2;
         margin-bottom: 32px;
     }
+
 
     .footer {
         display: flex;

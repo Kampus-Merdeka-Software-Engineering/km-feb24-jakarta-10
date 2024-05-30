@@ -77,6 +77,7 @@ header p {
     width: 100%;
 }
 
+/* ini */
 .nav-list {
     display: flex;
     justify-content: space-around;
@@ -336,7 +337,7 @@ header p {
 }
 
 .upskill {
-    font-family: "Actor", sans-serif;
+    font-family: 'Actor', sans-serif;
     font-size: 18px;
     font-weight: bold;
     color: #ffff;
@@ -356,7 +357,7 @@ header p {
 
     text-align: center;
     width: 100%;
-    font-family: "Actor", sans-serif;
+    font-family: 'Actor', sans-serif;
     font-size: 22px;
     color: #ffff;
     opacity: 0.8;
@@ -365,7 +366,7 @@ header p {
 }
 
 .button button {
-    font-family: "Actor", sans-serif;
+    font-family: 'Actor', sans-serif;
     font-size: 18px;
     font-weight: 500px;
     color: #ffff;
