@@ -488,36 +488,48 @@ function createTableChart(chartId, tableData) {
             `;
             tbody.appendChild(row);
         });
-        updatePagination(data, startIndex, rowsPerPage);
+        addPaginationButtons(data, tbody, startIndex, rowsPerPage);
     }
 
-    function updatePagination(data, startIndex, rowsPerPage) {
-        const paginationContainer = document.getElementById('pagination-container');
-        const pageLabel = document.getElementById('page-label');
-        const prevButton = document.getElementById('prev-button');
-        const nextButton = document.getElementById('next-button');
+    function addPaginationButtons(data, tbody, startIndex, rowsPerPage) {
+        const paginationContainer = document.querySelector('.pagination-container');
+        if (paginationContainer) {
+            paginationContainer.remove();
+        }
+
+        const newPaginationContainer = document.createElement('div');
+        newPaginationContainer.classList.add('pagination-container');
+        table.parentNode.appendChild(newPaginationContainer);
 
         const totalPages = Math.ceil(data.length / rowsPerPage);
         const currentPage = Math.floor(startIndex / rowsPerPage) + 1;
 
+        const pageLabel = document.createElement('span');
         pageLabel.textContent = `${startIndex + 1} - ${Math.min(startIndex + rowsPerPage, data.length)} / ${data.length}`;
+        newPaginationContainer.appendChild(pageLabel);
 
+        const prevButton = document.createElement('button');
+        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevButton.classList.add('pagination-button');
         prevButton.disabled = startIndex === 0;
-        nextButton.disabled = startIndex + rowsPerPage >= data.length;
-
         prevButton.addEventListener('click', () => {
             const newIndex = Math.max(startIndex - rowsPerPage, 0);
             currentIndex = newIndex;
             displayTableData(data, tbody, newIndex, rowsPerPage);
         });
+        newPaginationContainer.appendChild(prevButton);
 
+        const nextButton = document.createElement('button');
+        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextButton.classList.add('pagination-button');
+        nextButton.disabled = startIndex + rowsPerPage >= data.length;
         nextButton.addEventListener('click', () => {
             const newIndex = Math.min(startIndex + rowsPerPage, data.length - rowsPerPage);
             currentIndex = newIndex;
             displayTableData(data, tbody, newIndex, rowsPerPage);
         });
+        newPaginationContainer.appendChild(nextButton);
     }
-
     displayTableData(tableData, tbody, currentIndex, rowsPerPage);
 }
 

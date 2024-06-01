@@ -264,7 +264,7 @@ header p {
     margin: 5px;
     border-radius: 5px;
     flex: 1 1 auto;
-    max-width: 100px;
+    max-width: 30px;
 }
 
 .pagination-button:disabled {

@@ -324,9 +324,9 @@
     }
 
     .nav-item a {
-        font-size: 9px;
         color: #ffff;
         text-decoration: none;
+        font-size: 8px;
     }
 
     .nav-item a:hover {
@@ -357,19 +357,19 @@
     }
 
     #boroughFilter {
-        width: 100px;
+        width: 80px;
     }
 
     #neighborhoodFilter {
-        width: 120px;
+        width: 100px;
     }
 
     #buildingClassFilter {
-        width: 160px;
+        width: 130px;
     }
 
     .recordcount {
-        width: 120px;
+        width: 80px;
         padding-top: 8px;
         height: 50px;
         background-color: #f0f0f0;
@@ -380,17 +380,17 @@
     }
 
     .text {
-        font-size: 15px;
+        font-size: 10px;
         font-weight: bold;
     }
 
     .value {
-        font-size: 13px
+        font-size: 10px
     }
 
     .dashboard select {
         background-color: #f0f0f0;
-        font-size: 10px;
+        font-size: 8px;
         border-radius: 10px;
         border: 2px solid #0a142f;
         color: #0a142f;
@@ -414,7 +414,7 @@
     }
 
     .pieChart {
-        height: 400px;
+        height: 350px;
     }
 
     #tableChart {
