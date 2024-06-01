@@ -105,11 +105,11 @@ function processData(data) {
     const buildingCategoryCounts = {};
     const salesByNeighborhood = {};
     const priceRanges = {
-        "0 - 20": 0,
-        "20 - 100.000": 0,
-        "100.000 - 10.000.000": 0,
-        "10.000.000 - 1.000.000.000": 0,
-        "> 1.000.000.000": 0
+        "$0 - $20": 0,
+        "$20 - $100.000": 0,
+        "$100.000 - $10.000.000": 0,
+        "$10.000.000 - $1.000.000.000": 0,
+        "> $1.000.000.000": 0
     };
 
     const residentialUnits = {};
@@ -136,15 +136,15 @@ function processData(data) {
 
         // Process data for Sales Distribution by Price Range (Chart 2)
         if (salePrice > 0 && salePrice <= 20) {
-            priceRanges["0 - 20"]++;
+            priceRanges["$0 - $20"]++;
         } else if (salePrice > 20 && salePrice <= 100000) {
-            priceRanges["20 - 100.000"]++;
+            priceRanges["$20 - $100.000"]++;
         } else if (salePrice > 100000 && salePrice <= 10000000) {
-            priceRanges["100.000 - 10.000.000"]++;
+            priceRanges["$100.000 - $10.000.000"]++;
         } else if (salePrice > 10000000 && salePrice <= 1000000000) {
-            priceRanges["10.000.000 - 1.000.000.000"]++;
+            priceRanges["$10.000.000 - $1.000.000.000"]++;
         } else if (salePrice > 1000000000) {
-            priceRanges["> 1.000.000.000"]++;
+            priceRanges["> $1.000.000.000"]++;
         }
 
         // Process data for Sales of Residential and Commercial Units by Month (Chart 3)
