@@ -533,8 +533,6 @@ function createTableChart(chartId, tableData) {
     displayTableData(tableData, tbody, currentIndex, rowsPerPage);
 }
 
-
-
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
