@@ -168,6 +168,13 @@
         margin: 13px;
     }
 
+    .h4-team-member {
+        text-align: center;
+        font-size: 12px;
+        margin: 7px;
+        width: 100px;
+    }
+
     .background {
         padding: 40px 40px;
     }
@@ -353,7 +360,7 @@
         display: flex;
         justify-content: right;
         gap: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 0;
     }
 
     #boroughFilter {
@@ -394,7 +401,6 @@
         border-radius: 10px;
         border: 2px solid #0a142f;
         color: #0a142f;
-
     }
 
     .row-container {
@@ -414,7 +420,7 @@
     }
 
     .pieChart {
-        height: 350px;
+        height: 430px;
     }
 
     #tableChart {
@@ -453,6 +459,13 @@
         height: 60px;
         border-radius: 50%;
         margin: 13px;
+    }
+
+    .h4-team-member {
+        text-align: center;
+        font-size: 12px;
+        margin: 7px;
+        width: 100px;
     }
 
 
