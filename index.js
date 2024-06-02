@@ -13,29 +13,28 @@ let tableChart = null;
 fetch('https://raw.githubusercontent.com/Team10Jakarta/Project-SE/main/NYC%20DATASET.json')
     .then(response => response.json())
     .then(data => {
+        document.getElementById('loadingSpinner').style.display = 'block';
+
         rawData = data;
         populateFilters(rawData);
         filter(rawData);
+
+        document.getElementById('loadingSpinner').style.display = 'none';
     })
     .catch(error => console.error('Error fetching data:', error));
 
 
 function filter(data) {
-    const salesData = processData(data, currentFilters);
+    const salesData = processData(data);
     const recordCountElement = document.getElementById('recordCountValue');
     const totalSales = salesData.tableData.reduce((total, neighborhood) => total + neighborhood.totalSales, 0);
     recordCountElement.textContent = totalSales;
 
     createLineChart('lineChart', salesData.lineData);
-    createPriceRangePieChart('pieChart', salesData.priceRangeData);
+    createPieChart('pieChart', salesData.priceRangeData);
     createUnitsLineChart('unitsLineChart', salesData);
     createBarChart('barChart', salesData.barData);
     createTableChart('tableChart', salesData.tableData);
-}
-
-function updateRecordCount(count) {
-    const recordCountValue = document.getElementById('recordCountValue');
-    recordCountValue.textContent = count;
 }
 
 function populateFilters(data) {
@@ -52,6 +51,10 @@ function populateFilters(data) {
     const sortedBoroughs = Array.from(boroughSet).sort();
     const sortedNeighborhoods = Array.from(neighborhoodSet).sort();
     const sortedBuildingClasses = Array.from(buildingClassSet).sort();
+
+    const boroughFilter = document.getElementById('boroughFilter');
+    const neighborhoodFilter = document.getElementById('neighborhoodFilter');
+    const buildingClassFilter = document.getElementById('buildingClassFilter');
 
     sortedBoroughs.forEach(borough => {
         const option = document.createElement('option');
@@ -73,31 +76,141 @@ function populateFilters(data) {
         option.textContent = buildingClass;
         buildingClassFilter.appendChild(option);
     });
+
+    boroughFilter.addEventListener('change', (event) => {
+        currentFilters.borough = event.target.value;
+        if (currentFilters.borough === '') {
+            // Jika filter 'All Borough' dipilih kembali, reset semua filter terkait
+            currentFilters.neighborhood = '';
+            currentFilters.buildingClass = '';
+            updateNeighborhoodFilter(rawData);
+            updateBuildingClassFilter(rawData);
+            filter(rawData); // perbarui data dengan data awal
+        } else {
+            // Jika filter borough lain dipilih, panggil fungsi filter() langsung
+            filter(rawData); // perbarui data dengan data awal
+            updateNeighborhoodFilter(rawData);
+            updateBuildingClassFilter(rawData);
+        }
+    });
+
+    neighborhoodFilter.addEventListener('change', (event) => {
+        currentFilters.neighborhood = event.target.value;
+        filter();
+        updateBuildingClassFilter(data);
+    });
+
+    buildingClassFilter.addEventListener('change', (event) => {
+        currentFilters.buildingClass = event.target.value;
+        filter();
+    });
 }
 
-//Proses data untuk setiap chart
+function updateNeighborhoodFilter(data) {
+    const neighborhoodFilter = document.getElementById('neighborhoodFilter');
+    neighborhoodFilter.innerHTML = '<option value="">All Neighborhood</option>';
+
+    if (currentFilters.borough === '') {
+        const neighborhoodSet = new Set();
+        data.forEach(item => {
+            neighborhoodSet.add(item.NEIGHBORHOOD);
+        });
+
+        const sortedNeighborhoods = Array.from(neighborhoodSet).sort();
+
+        sortedNeighborhoods.forEach(neighborhood => {
+            const option = document.createElement('option');
+            option.value = neighborhood;
+            option.textContent = neighborhood;
+            neighborhoodFilter.appendChild(option);
+        });
+    } else {
+        // Jika filter borough lain dipilih, update daftar neighborhood sesuai dengan borough yang dipilih
+        const neighborhoodSet = new Set();
+        data.forEach(item => {
+            if (currentFilters.borough === '' || item.BOROUGH === currentFilters.borough) {
+                neighborhoodSet.add(item.NEIGHBORHOOD);
+            }
+        });
+
+        const sortedNeighborhoods = Array.from(neighborhoodSet).sort();
+
+        sortedNeighborhoods.forEach(neighborhood => {
+            const option = document.createElement('option');
+            option.value = neighborhood;
+            option.textContent = neighborhood;
+            neighborhoodFilter.appendChild(option);
+        });
+    }
+}
+
+// Modifikasi pembaruan filter ketika filter 'All Borough' dipilih kembali
+function updateBuildingClassFilter(data) {
+    const buildingClassFilter = document.getElementById('buildingClassFilter');
+    buildingClassFilter.innerHTML = '<option value="">All Building Class Category</option>';
+
+    if (currentFilters.borough === '') {
+        const buildingClassSet = new Set();
+        data.forEach(item => {
+            buildingClassSet.add(item.BUILDING_CLASS_CATEGORY);
+        });
+
+        const sortedBuildingClasses = Array.from(buildingClassSet).sort();
+
+        sortedBuildingClasses.forEach(buildingClass => {
+            const option = document.createElement('option');
+            option.value = buildingClass;
+            option.textContent = buildingClass;
+            buildingClassFilter.appendChild(option);
+        });
+    } else {
+        // Jika filter borough lain dipilih, update daftar building class category sesuai dengan borough dan neighborhood yang dipilih
+        const buildingClassSet = new Set();
+        data.forEach(item => {
+            if ((currentFilters.borough === '' || item.BOROUGH === currentFilters.borough) &&
+                (currentFilters.neighborhood === '' || item.NEIGHBORHOOD === currentFilters.neighborhood)) {
+                buildingClassSet.add(item.BUILDING_CLASS_CATEGORY);
+            }
+        });
+
+        const sortedBuildingClasses = Array.from(buildingClassSet).sort();
+
+        sortedBuildingClasses.forEach(buildingClass => {
+            const option = document.createElement('option');
+            option.value = buildingClass;
+            option.textContent = buildingClass;
+            buildingClassFilter.appendChild(option);
+        });
+    }
+}
+
+function updateBuildingClassFilter(data) {
+    const buildingClassFilter = document.getElementById('buildingClassFilter');
+    buildingClassFilter.innerHTML = '<option value="">All Building Class Category</option>';
+
+    const buildingClassSet = new Set();
+    data.forEach(item => {
+        if ((currentFilters.borough === '' || item.BOROUGH === currentFilters.borough) &&
+            (currentFilters.neighborhood === '' || item.NEIGHBORHOOD === currentFilters.neighborhood)) {
+            buildingClassSet.add(item.BUILDING_CLASS_CATEGORY);
+        }
+    });
+
+    const sortedBuildingClasses = Array.from(buildingClassSet).sort();
+
+    sortedBuildingClasses.forEach(buildingClass => {
+        const option = document.createElement('option');
+        option.value = buildingClass;
+        option.textContent = buildingClass;
+        buildingClassFilter.appendChild(option);
+    });
+}
+
 function processData(data) {
     const filteredData = rawData.filter(item => {
         return (currentFilters.borough === '' || item.BOROUGH === currentFilters.borough) &&
             (currentFilters.neighborhood === '' || item.NEIGHBORHOOD === currentFilters.neighborhood) &&
             (currentFilters.buildingClass === '' || item.BUILDING_CLASS_CATEGORY === currentFilters.buildingClass);
-    });
-    const boroughFilter = document.getElementById('boroughFilter');
-    boroughFilter.addEventListener('change', (event) => {
-        currentFilters.borough = event.target.value;
-        filter(currentFilters);
-    });
-
-    const neighborhoodFilter = document.getElementById('neighborhoodFilter');
-    neighborhoodFilter.addEventListener('change', (event) => {
-        currentFilters.neighborhood = event.target.value;
-        filter(currentFilters);
-    });
-
-    const buildingClassFilter = document.getElementById('buildingClassFilter');
-    buildingClassFilter.addEventListener('change', (event) => {
-        currentFilters.buildingClass = event.target.value;
-        filter(currentFilters);
     });
     const salesData = { lineData: {}, lineDatat: {}, barData: {}, priceRangeData: {}, tableData: {} };
     const salesByBorough = {};
@@ -252,7 +365,7 @@ function responsiveFontSize(chart) {
     let titleFontSize, legendFontSize, scalesFontSize;
 
     if (width >= 576 && width <= 1105) {
-        titleFontSize = 16;
+        titleFontSize = 18;
         legendFontSize = 14;
         scalesFontSize = 12;
     } else if (width <= 575) {
@@ -314,12 +427,12 @@ function createLineChart(chartId, lineData) {
                     display: true,
                     text: 'Total Sales in Each Borough by Month',
                     color: 'white',
-                    font: { size: 20 },
+                    font: { family: 'Libre Baskerville', size: 20 },
                     padding: { top: 10, bottom: 30 }
                 },
                 legend: {
                     position: 'top',
-                    labels: { color: 'white', font: { size: 16 } }
+                    labels: { color: 'white', font: { size: 14 } }
                 }
             },
             scales: {
@@ -353,7 +466,7 @@ function createBarChart(chartId, barData) {
                     display: true,
                     text: 'Total Sales by Building Class Category',
                     color: 'white',
-                    font: { size: 20 },
+                    font: { family: 'Libre Baskerville', size: 20 },
                     padding: { top: 10, bottom: 30 }
                 },
                 legend: { display: false }
@@ -371,7 +484,7 @@ function createBarChart(chartId, barData) {
     responsiveFontSize(barChart);
 }
 
-function createPriceRangePieChart(chartId, priceRangeData) {
+function createPieChart(chartId, priceRangeData) {
     if (pieChart) {
         pieChart.destroy();
     }
@@ -388,22 +501,17 @@ function createPriceRangePieChart(chartId, priceRangeData) {
                 title: {
                     display: true,
                     text: 'Sales Distribution by Price Range',
-                    color: 'white',
-                    font: { size: 20 },
-                    padding: { top: 20, bottom: 30 }
+                    color: '#ffff',
+                    font: { family: 'Libre Baskerville', size: 21 },
+                    padding: { top: 10, bottom: 30 }
                 },
                 legend: {
-                    position: 'top',
-                    labels: { color: 'white', font: { size: 16 } }
+                    position: 'bottom',
+                    labels: { color: 'white', font: { size: 14 } }
                 }
-            },
-            onResize: (chart) => {
-                responsiveFontSize(chart);
-                chart.update();
             }
         }
     });
-    responsiveFontSize(pieChart);
 }
 
 function createUnitsLineChart(chartId, salesData) {
@@ -424,12 +532,12 @@ function createUnitsLineChart(chartId, salesData) {
                     display: true,
                     text: 'Sales of Residential and Commercial Units by Month',
                     color: 'white',
-                    font: { size: 20 },
+                    font: { family: 'Libre Baskerville', size: 20 },
                     padding: { top: 10, bottom: 30 }
                 },
                 legend: {
                     position: 'top',
-                    labels: { color: 'white', font: { size: 16 } }
+                    labels: { color: 'white', font: { size: 14 } }
                 }
             },
             scales: {
@@ -445,6 +553,48 @@ function createUnitsLineChart(chartId, salesData) {
     responsiveFontSize(unitsLineChart);
 }
 
+function responsiveTableFontSize(tableContainer) {
+    let width = tableContainer.Width;
+    let titleFontSize, headerFontSize, rowFontSize, paginationFontSize;
+
+    if (width >= 576 && width <= 1105) {
+        titleFontSize = 18;
+        headerFontSize = 14;
+        rowFontSize = 12;
+        paginationFontSize = 12;
+    } else if (width <= 575) {
+        titleFontSize = 15;
+        headerFontSize = 12;
+        rowFontSize = 10;
+        paginationFontSize = 10;
+    } else {
+        titleFontSize = 20;
+        headerFontSize = 16;
+        rowFontSize = 14;
+        paginationFontSize = 14;
+    }
+
+    const title = tableContainer.querySelector('.table-title');
+    if (title) {
+        title.style.fontSize = `${titleFontSize}px`;
+    }
+
+    const tableHeaders = tableContainer.querySelectorAll('th');
+    tableHeaders.forEach(header => {
+        header.style.fontSize = `${headerFontSize}px`;
+    });
+
+    const tableRows = tableContainer.querySelectorAll('td');
+    tableRows.forEach(row => {
+        row.style.fontSize = `${rowFontSize}px`;
+    });
+
+    const paginationButtons = tableContainer.querySelectorAll('.pagination-button, .pagination-container span');
+    paginationButtons.forEach(button => {
+        button.style.fontSize = `${paginationFontSize}px`;
+    });
+}
+
 function createTableChart(chartId, tableData) {
     if (tableChart) {
         tableChart.destroy();
@@ -456,13 +606,18 @@ function createTableChart(chartId, tableData) {
     const tableContainer = document.getElementById(chartId).parentNode;
 
     // Check if the title already exists
-    let title = tableContainer.querySelector('h3');
+    let title = tableContainer.querySelector('.table-title');
     if (!title) {
         // Create the title element
-        title = document.createElement('h3');
+        title = document.createElement('div');
         title.textContent = 'Most Property Sales by Neighborhood';
+        title.classList.add('table-title');
         title.style.textAlign = 'center';
         title.style.color = 'white';
+        title.style.fontSize = '20px';
+        title.style.paddingTop = '35px';
+        title.style.fontFamily = 'Libre Baskerville';
+        title.style.fontWeight = 'bold';
         // Insert the title before the table
         tableContainer.insertBefore(title, tableContainer.firstChild);
     }
@@ -516,6 +671,7 @@ function createTableChart(chartId, tableData) {
             const newIndex = Math.max(startIndex - rowsPerPage, 0);
             currentIndex = newIndex;
             displayTableData(data, tbody, newIndex, rowsPerPage);
+            responsiveTableFontSize(tableContainer);
         });
         newPaginationContainer.appendChild(prevButton);
 
@@ -527,10 +683,13 @@ function createTableChart(chartId, tableData) {
             const newIndex = Math.min(startIndex + rowsPerPage, data.length - rowsPerPage);
             currentIndex = newIndex;
             displayTableData(data, tbody, newIndex, rowsPerPage);
+            responsiveTableFontSize(tableContainer);
         });
         newPaginationContainer.appendChild(nextButton);
     }
+
     displayTableData(tableData, tbody, currentIndex, rowsPerPage);
+    responsiveTableFontSize(tableContainer);
 }
 
 function getRandomColor() {
@@ -542,3 +701,18 @@ function getRandomColor() {
     return color;
 }
 
+window.onscroll = function () { scrollFunction() };
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("myBtn").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
