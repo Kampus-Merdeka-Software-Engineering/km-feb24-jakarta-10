@@ -68,6 +68,9 @@
             </div>
             <div class="grafik-section">
                 <div id="mainContent">
+                    <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                     <div class="chart-container">
                         <div class="lineChart">
                             <canvas id="lineChart"></canvas>
@@ -149,7 +152,7 @@
                 <br>
                 <div class="team-mem">
                     <img class="image-member" src="assets/images/Ari.jpg" alt="member1">
-                    <h4 class="h4-team-member">Ahsari Wahyudi</h4>
+                    <h4 class="h4-team-member">Ashari Wahyudi</h4>
                 </div>
                 <div class="team-mem">
                     <img class="image-member" src="assets/images/Krisna.jpg" alt="member1">
@@ -241,6 +244,7 @@
                 </div>
             </div>
         </div>
+        <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
     </footer>
 </body>
 
