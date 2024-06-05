@@ -248,7 +248,7 @@ function processData(data) {
         salesByBorough[borough][monthYear]++;
 
         // Process data for Sales Distribution by Price Range (Chart 2)
-        if (salePrice > 0 && salePrice <= 20) {
+        if (salePrice >= 0 && salePrice <= 20) {
             priceRanges["$0 - $20"]++;
         } else if (salePrice > 20 && salePrice <= 100000) {
             priceRanges["$20 - $100.000"]++;
