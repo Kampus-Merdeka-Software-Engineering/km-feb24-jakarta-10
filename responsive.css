@@ -135,14 +135,6 @@
         width: 400px;
     }
 
-    .custom-table tr {
-        font-size: 13px;
-    }
-
-    .custom-table td {
-        font-size: 10px;
-    }
-
     .pagination-container {
         flex-direction: row;
         align-items: center;
@@ -425,15 +417,6 @@
 
     #tableChart {
         width: 300px;
-    }
-
-
-    .custom-table tr {
-        font-size: 13px;
-    }
-
-    .custom-table td {
-        font-size: 10px;
     }
 
     .pagination-container {
