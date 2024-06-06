@@ -13,13 +13,17 @@ let tableChart = null;
 fetch('https://raw.githubusercontent.com/Team10Jakarta/Project-SE/main/NYC%20DATASET.json')
     .then(response => response.json())
     .then(data => {
-        document.getElementById('loadingSpinner').style.display = 'block';
+        if (loadingSpinner) {
+            loadingSpinner.style.display = 'block';
+        }
 
         rawData = data;
         populateFilters(rawData);
         filter(rawData);
 
-        document.getElementById('loadingSpinner').style.display = 'none';
+        if (loadingSpinner) {
+            loadingSpinner.style.display = 'none';
+        }
     })
     .catch(error => console.error('Error fetching data:', error));
 
@@ -436,8 +440,33 @@ function createLineChart(chartId, lineData) {
                 }
             },
             scales: {
-                x: { ticks: { color: 'white', font: { size: 14 } } },
-                y: { ticks: { color: 'white', font: { size: 14 } } }
+                x: {
+                    ticks: { color: 'white', font: { size: 14 } },
+                    title: {
+                        display: true,
+                        text: 'Month',
+                        color: 'white',
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 14
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Total Sales',
+                        color: 'white',
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
             },
             onResize: (chart) => {
                 responsiveFontSize(chart);
@@ -472,8 +501,28 @@ function createBarChart(chartId, barData) {
                 legend: { display: false }
             },
             scales: {
-                x: { ticks: { color: 'white', font: { size: 14 } } },
-                y: { ticks: { color: 'white', font: { size: 14 } } }
+                x: {
+                    ticks: { color: 'white', font: { size: 14 } },
+                    title: {
+                        display: true,
+                        text: 'Building Class Category',
+                        color: 'white',
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                y: {
+                    ticks: { color: 'white', font: { size: 14 } },
+                    title: {
+                        display: true,
+                        text: 'Total Sales',
+                        color: 'white',
+                        font: {
+                            size: 14
+                        },
+                    }
+                }
             },
             onResize: (chart) => {
                 responsiveFontSize(chart);
@@ -541,8 +590,28 @@ function createUnitsLineChart(chartId, salesData) {
                 }
             },
             scales: {
-                x: { ticks: { color: 'white', font: { size: 14 } } },
-                y: { ticks: { color: 'white', font: { size: 14 } } }
+                x: {
+                    ticks: { color: 'white', font: { size: 14 } },
+                    title: {
+                        display: true,
+                        text: 'Month',
+                        color: 'white',
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                y: {
+                    ticks: { color: 'white', font: { size: 14 } },
+                    title: {
+                        display: true,
+                        text: 'Units Sold',
+                        color: 'white',
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
             },
             onResize: (chart) => {
                 responsiveFontSize(chart);
@@ -600,9 +669,6 @@ function createTableChart(chartId, tableData) {
         tableChart.destroy();
     }
 
-    // Sort the data by totalSales in descending order
-    tableData.sort((a, b) => b.totalSales - a.totalSales);
-
     const tableContainer = document.getElementById(chartId).parentNode;
 
     // Check if the title already exists
@@ -623,6 +689,42 @@ function createTableChart(chartId, tableData) {
     }
 
     const table = document.getElementById(chartId);
+
+    // Create table header with sorting functionality
+    let thead = table.querySelector('thead');
+    if (!thead) {
+        thead = document.createElement('thead');
+        table.appendChild(thead);
+    }
+
+    thead.querySelectorAll('th').forEach(th => {
+        th.addEventListener('click', () => {
+            const column = th.getAttribute('data-column');
+            const order = th.getAttribute('data-order');
+            const newOrder = order === 'asc' ? 'desc' : 'asc';
+            th.setAttribute('data-order', newOrder);
+
+            tableData.sort((a, b) => {
+                if (column === 'totalSales') {
+                    return newOrder === 'asc' ? a[column] - b[column] : b[column] - a[column];
+                } else {
+                    return newOrder === 'asc' ? a[column].localeCompare(b[column]) : b[column].localeCompare(a[column]);
+                }
+            });
+
+            displayTableData(tableData, tbody, currentIndex, rowsPerPage);
+
+            // Update sort icon
+            thead.querySelectorAll('.sort-icon').forEach(icon => {
+                icon.className = 'sort-icon fas fa-sort';
+            });
+
+            // Update sort icon for the clicked column
+            const sortIcon = th.querySelector('.sort-icon');
+            sortIcon.className = newOrder === 'asc' ? 'sort-icon fas fa-sort-up' : 'sort-icon fas fa-sort-down';
+        });
+    });
+
     let tbody = table.querySelector('tbody');
     if (!tbody) {
         tbody = document.createElement('tbody');
@@ -691,6 +793,8 @@ function createTableChart(chartId, tableData) {
     displayTableData(tableData, tbody, currentIndex, rowsPerPage);
     responsiveTableFontSize(tableContainer);
 }
+
+
 
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
