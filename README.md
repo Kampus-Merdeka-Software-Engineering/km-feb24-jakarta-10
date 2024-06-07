@@ -1,7 +1,7 @@
 # New York Property Sales
 
 ## Description
-This project is a capstone project from Revou, aiming to provide a comprehensive bike sales report dashboard for analysis purposes.
+This project is a capstone project from Revou, aiming to provide a comprehensive New York property sales report dashboard for analysis purposes.
 
 ## Usage
 To use the dashboard, follow these steps:
