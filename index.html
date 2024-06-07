@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NYC Property Sales</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +16,8 @@
         href="https://fonts.googleapis.com/css2?family=Actor&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="script.js"></script>
 </head>
 
@@ -77,34 +80,21 @@
                         </div>
                     </div>
                     <div class="row-container">
-                        <div class="table-container">
+                        <div class="pie-container">
                             <div class="pieChart">
                                 <canvas id="pieChart"></canvas>
                             </div>
                         </div>
                         <div class="table-container">
-                            <div class="tableChart">
-                                <table id="tableChart" class="custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th data-column="neighborhood" data-order="desc">Neighborhood <i
-                                                    class="sort-icon fas fa-sort"></i></th>
-                                            <th data-column="totalSales" data-order="desc">Total Sales <i
-                                                    class="sort-icon fas fa-sort"></i></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                    <br>
-                                </table>
-                                <div id="pagination-container" class="pagination-container">
-                                    <button id="prev-button" class="pagination-button"><i
-                                            class="fas fa-chevron-left"></i></button>
-                                    <span id="page-label"></span>
-                                    <button id="next-button" class="pagination-button"><i
-                                            class="fas fa-chevron-right"></i></button>
-                                </div>
-                            </div>
+                            <table id="tableChart" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>Neighborhood</th>
+                                        <th>Sales Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="chart-container">
@@ -120,7 +110,6 @@
                 </div>
             </div>
     </div>
-
 
     <div class="member-team" id="ourteams">
         <div class="wrapper">

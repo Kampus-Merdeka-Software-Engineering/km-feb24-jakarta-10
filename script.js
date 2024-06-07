@@ -371,15 +371,18 @@ function responsiveFontSize(chart) {
     if (width >= 576 && width <= 1105) {
         titleFontSize = 18;
         legendFontSize = 14;
-        scalesFontSize = 12;
+        ticksFontSize = 12;
+        scalesTitleFontSize = 12;
     } else if (width <= 575) {
         titleFontSize = 15;
         legendFontSize = 10;
-        scalesFontSize = 8;
+        ticksFontSize = 8;
+        scalesTitleFontSize = 8;
     } else {
         titleFontSize = 20;
         legendFontSize = 16;
-        scalesFontSize = 12;
+        ticksFontSize = 12;
+        scalesTitleFontSize = 12;
     }
 
     if (chart.options.plugins.title.font) {
@@ -397,17 +400,34 @@ function responsiveFontSize(chart) {
     if (chart.options.scales) {
         if (chart.options.scales.x && chart.options.scales.x.ticks) {
             if (chart.options.scales.x.ticks.font) {
-                chart.options.scales.x.ticks.font.size = scalesFontSize;
+                chart.options.scales.x.ticks.font.size = ticksFontSize;
             } else {
-                chart.options.scales.x.ticks.font = { size: scalesFontSize };
+                chart.options.scales.x.ticks.font = { size: ticksFontSize };
             }
         }
 
         if (chart.options.scales.y && chart.options.scales.y.ticks) {
             if (chart.options.scales.y.ticks.font) {
-                chart.options.scales.y.ticks.font.size = scalesFontSize;
+                chart.options.scales.y.ticks.font.size = ticksFontSize;
             } else {
-                chart.options.scales.y.ticks.font = { size: scalesFontSize };
+                chart.options.scales.y.ticks.font = { size: ticksFontSize };
+            }
+        }
+    }
+    if (chart.options.scales) {
+        if (chart.options.scales.x && chart.options.scales.x.title) {
+            if (chart.options.scales.x.title.font) {
+                chart.options.scales.x.title.font.size = scalesTitleFontSize;
+            } else {
+                chart.options.scales.x.title.font = { size: scalesTitleFontSize };
+            }
+        }
+
+        if (chart.options.scales.y && chart.options.scales.y.title) {
+            if (chart.options.scales.y.title.font) {
+                chart.options.scales.y.title.font.size = scalesTitleFontSize;
+            } else {
+                chart.options.scales.y.title.font = { size: scalesTitleFontSize };
             }
         }
     }
@@ -558,6 +578,10 @@ function createPieChart(chartId, priceRangeData) {
                     position: 'bottom',
                     labels: { color: 'white', font: { size: 14 } }
                 }
+            },
+            onResize: (chart) => {
+                responsiveFontSize(chart);
+                chart.update();
             }
         }
     });
@@ -622,179 +646,21 @@ function createUnitsLineChart(chartId, salesData) {
     responsiveFontSize(unitsLineChart);
 }
 
-function responsiveTableFontSize(tableContainer) {
-    let width = tableContainer.Width;
-    let titleFontSize, headerFontSize, rowFontSize, paginationFontSize;
-
-    if (width >= 576 && width <= 1105) {
-        titleFontSize = 18;
-        headerFontSize = 14;
-        rowFontSize = 12;
-        paginationFontSize = 12;
-    } else if (width <= 575) {
-        titleFontSize = 15;
-        headerFontSize = 12;
-        rowFontSize = 10;
-        paginationFontSize = 10;
-    } else {
-        titleFontSize = 20;
-        headerFontSize = 16;
-        rowFontSize = 14;
-        paginationFontSize = 14;
-    }
-
-    const title = tableContainer.querySelector('.table-title');
-    if (title) {
-        title.style.fontSize = `${titleFontSize}px`;
-    }
-
-    const tableHeaders = tableContainer.querySelectorAll('th');
-    tableHeaders.forEach(header => {
-        header.style.fontSize = `${headerFontSize}px`;
-    });
-
-    const tableRows = tableContainer.querySelectorAll('td');
-    tableRows.forEach(row => {
-        row.style.fontSize = `${rowFontSize}px`;
-    });
-
-    const paginationButtons = tableContainer.querySelectorAll('.pagination-button, .pagination-container span');
-    paginationButtons.forEach(button => {
-        button.style.fontSize = `${paginationFontSize}px`;
-    });
-}
-
 function createTableChart(chartId, tableData) {
-    if (tableChart) {
-        tableChart.destroy();
+    if (tableChart !== null) {
+        tableChart.clear();
     }
-
-    const tableContainer = document.getElementById(chartId).parentNode;
-
-    // Check if the title already exists
-    let title = tableContainer.querySelector('.table-title');
-    if (!title) {
-        // Create the title element
-        title = document.createElement('div');
-        title.textContent = 'Most Property Sales by Neighborhood';
-        title.classList.add('table-title');
-        title.style.textAlign = 'center';
-        title.style.color = 'white';
-        title.style.fontSize = '20px';
-        title.style.paddingTop = '35px';
-        title.style.fontFamily = 'Libre Baskerville';
-        title.style.fontWeight = 'bold';
-        // Insert the title before the table
-        tableContainer.insertBefore(title, tableContainer.firstChild);
-    }
-
-    const table = document.getElementById(chartId);
-
-    // Create table header with sorting functionality
-    let thead = table.querySelector('thead');
-    if (!thead) {
-        thead = document.createElement('thead');
-        table.appendChild(thead);
-    }
-
-    thead.querySelectorAll('th').forEach(th => {
-        th.addEventListener('click', () => {
-            const column = th.getAttribute('data-column');
-            const order = th.getAttribute('data-order');
-            const newOrder = order === 'asc' ? 'desc' : 'asc';
-            th.setAttribute('data-order', newOrder);
-
-            tableData.sort((a, b) => {
-                if (column === 'totalSales') {
-                    return newOrder === 'asc' ? a[column] - b[column] : b[column] - a[column];
-                } else {
-                    return newOrder === 'asc' ? a[column].localeCompare(b[column]) : b[column].localeCompare(a[column]);
-                }
-            });
-
-            displayTableData(tableData, tbody, currentIndex, rowsPerPage);
-
-            // Update sort icon
-            thead.querySelectorAll('.sort-icon').forEach(icon => {
-                icon.className = 'sort-icon fas fa-sort';
-            });
-
-            // Update sort icon for the clicked column
-            const sortIcon = th.querySelector('.sort-icon');
-            sortIcon.className = newOrder === 'asc' ? 'sort-icon fas fa-sort-up' : 'sort-icon fas fa-sort-down';
-        });
+    const listColumn = Object.keys(tableData[0]).map(col => {
+        return {
+            data: col
+        };
     });
-
-    let tbody = table.querySelector('tbody');
-    if (!tbody) {
-        tbody = document.createElement('tbody');
-        table.appendChild(tbody);
-    }
-
-    const rowsPerPage = 10;
-    let currentIndex = 0;
-
-    function displayTableData(data, tbody, startIndex, rowsPerPage) {
-        tbody.innerHTML = '';
-        const currentPageData = data.slice(startIndex, startIndex + rowsPerPage);
-        currentPageData.forEach(data => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${data.neighborhood}</td>
-                <td>${data.totalSales}</td>
-            `;
-            tbody.appendChild(row);
-        });
-        addPaginationButtons(data, tbody, startIndex, rowsPerPage);
-    }
-
-    function addPaginationButtons(data, tbody, startIndex, rowsPerPage) {
-        const paginationContainer = document.querySelector('.pagination-container');
-        if (paginationContainer) {
-            paginationContainer.remove();
-        }
-
-        const newPaginationContainer = document.createElement('div');
-        newPaginationContainer.classList.add('pagination-container');
-        table.parentNode.appendChild(newPaginationContainer);
-
-        const totalPages = Math.ceil(data.length / rowsPerPage);
-        const currentPage = Math.floor(startIndex / rowsPerPage) + 1;
-
-        const pageLabel = document.createElement('span');
-        pageLabel.textContent = `${startIndex + 1} - ${Math.min(startIndex + rowsPerPage, data.length)} / ${data.length}`;
-        newPaginationContainer.appendChild(pageLabel);
-
-        const prevButton = document.createElement('button');
-        prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-        prevButton.classList.add('pagination-button');
-        prevButton.disabled = startIndex === 0;
-        prevButton.addEventListener('click', () => {
-            const newIndex = Math.max(startIndex - rowsPerPage, 0);
-            currentIndex = newIndex;
-            displayTableData(data, tbody, newIndex, rowsPerPage);
-            responsiveTableFontSize(tableContainer);
-        });
-        newPaginationContainer.appendChild(prevButton);
-
-        const nextButton = document.createElement('button');
-        nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-        nextButton.classList.add('pagination-button');
-        nextButton.disabled = startIndex + rowsPerPage >= data.length;
-        nextButton.addEventListener('click', () => {
-            const newIndex = Math.min(startIndex + rowsPerPage, data.length - rowsPerPage);
-            currentIndex = newIndex;
-            displayTableData(data, tbody, newIndex, rowsPerPage);
-            responsiveTableFontSize(tableContainer);
-        });
-        newPaginationContainer.appendChild(nextButton);
-    }
-
-    displayTableData(tableData, tbody, currentIndex, rowsPerPage);
-    responsiveTableFontSize(tableContainer);
+    tableChart = new DataTable(`#${chartId}`, {
+        columns: listColumn,
+        data: tableData,
+        responsive: true
+    });
 }
-
-
 
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
