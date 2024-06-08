@@ -19,6 +19,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 </head>
 
 <body>
@@ -36,13 +37,24 @@
                 </div>
                 <nav class="header-nav">
                     <nav class="nav-list">
-                        <div class="nav-item"><a href="#lineChart">Line Chart</a></div>
-                        <div class="nav-item"><a href="#pieChart">Pie Chart</a></div>
-                        <div class="nav-item"><a href="#tableChart">Table</a></div>
-                        <div class="nav-item"><a href="#unitsLineChart">Units Line Chart</a></div>
-                        <div class="nav-item"><a href="#barChart">Bar Chart</a></div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="dropbtn">Charts</a>
+                            <div class="dropdown-content">
+                                <a href="#lineChart">Total Sales by Month</a>
+                                <a href="#pieChart">Price Range</a>
+                                <a href="#tableChart">Table of Sales Count</a>
+                                <a href="#unitsLineChart">Property Type</a>
+                                <a href="#barChart">Total Sales by Category</a>
+                            </div>
+                        </div>
                         <div class="nav-item"><a href="#ourteams">Our Teams</a></div>
                         <div class="nav-item"><a href="#contact">Contact</a></div>
+                        <div class="nav-item"><a
+                                href="https://lookerstudio.google.com/u/0/reporting/cbbf70c2-94b8-4cae-a3b2-eebbf752803e/page/sDNxD">Data
+                                Looker</a></div>
+                        <div class="nav-item"><a
+                                href="https://docs.google.com/spreadsheets/d/1hBCpb1E7kNnB3VtZUYb4-mQAVc6yaL32Jfg4su4Ojas/edit#gid=1135081899">Raw
+                                Data</a></div>
                     </nav>
                 </nav>
             </div>
@@ -51,8 +63,8 @@
         <section class="main-section">
             <div class="dashboard" id="">
                 <div class="recordcount">
-                    <span class="text">Record Count <br> </span>
-                    <span class="value" id="recordCountValue">0</span>
+                    <span class="value" id="recordCountValue">0</span> <br>
+                    <span class="text">Record Count</span>
                 </div>
                 <div class="filter">
                     <select id="boroughFilter" name="boroughFilter">
@@ -70,45 +82,44 @@
 
             </div>
             <div class="grafik-section">
-                <div id="mainContent">
-                    <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none;">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <div class="chart-container">
-                        <div class="lineChart">
-                            <canvas id="lineChart"></canvas>
+                <div class="main-content">
+                    <div class="row">
+                        <div class="chart-container col-12">
+                            <div class="lineChart">
+                                <canvas id="lineChart"></canvas>
+                            </div>
                         </div>
                     </div>
-                    <div class="row-container">
-                        <div class="pie-container">
+                    <div class="row">
+                        <div class="pie-container col-6">
                             <div class="pieChart">
                                 <canvas id="pieChart"></canvas>
                             </div>
                         </div>
-                        <div class="table-container">
-                            <table id="tableChart" class="display">
-                                <thead>
-                                    <tr>
-                                        <th>Neighborhood</th>
-                                        <th>Sales Count</th>
-                                    </tr>
-                                </thead>
+                        <div class="table-container col-6">
+                            <table id="tableChart" style="width: 80%;">
+                                <thead></thead>
                                 <tbody></tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="chart-container">
-                        <div class="unitsLineChart">
-                            <canvas id="unitsLineChart"></canvas>
+                    <div class="row">
+                        <div class="chart-container col-12">
+                            <div class="unitsLineChart">
+                                <canvas id="unitsLineChart"></canvas>
+                            </div>
                         </div>
                     </div>
-                    <div class="chart-container">
-                        <div class="barChart">
-                            <canvas id="barChart"></canvas>
+                    <div class="row">
+                        <div class="chart-container col-12">
+                            <div class="barChart">
+                                <canvas id="barChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+    </div>
     </div>
 
     <div class="member-team" id="ourteams">
@@ -200,24 +211,6 @@
                 </p>
                 <div class="line"></div>
                 <div class="footer" id="contact">
-                    <div class="footer-img">
-                        <img class="revou" src="assets/logo/revou.png" alt="">
-                        <img class="km" src="assets/logo/km-bgputih.jpg" alt="">
-                        <img class="msib" src="assets/logo/msib-bgputih.jpg" alt="">
-                    </div>
-                    <div class="footer-p">
-                        <a href="" style="text-decoration:none">
-                            Team
-                        </a>
-                        <a href="https://docs.google.com/document/d/17A_aYQYxya-PB2wJOPK6MMWekYTzNqgzPAdVFkcVEMQ/edit#heading=h.aauvph48x66m"
-                            style="text-decoration:none">
-                            Case Studies
-                        </a>
-                        <a href="https://lookerstudio.google.com/u/0/reporting/cbbf70c2-94b8-4cae-a3b2-eebbf752803e/page/sDNxD"
-                            style="text-decoration:none">
-                            Visualisations
-                        </a>
-                    </div>
                     <div class="footer-icon">
                         <a href="https://www.linkedin.com/feed/">
                             <img src="assets/logo/linkedin.png" alt="Linkedin">
