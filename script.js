@@ -13,20 +13,10 @@ let tableChart = null;
 fetch('https://raw.githubusercontent.com/Team10Jakarta/Project-SE/main/NYC%20DATASET.json')
     .then(response => response.json())
     .then(data => {
-        if (loadingSpinner) {
-            loadingSpinner.style.display = 'block';
-        }
-
         rawData = data;
         populateFilters(rawData);
         filter(rawData);
-
-        if (loadingSpinner) {
-            loadingSpinner.style.display = 'none';
-        }
     })
-    .catch(error => console.error('Error fetching data:', error));
-
 
 function filter(data) {
     const salesData = processData(data);
@@ -84,15 +74,13 @@ function populateFilters(data) {
     boroughFilter.addEventListener('change', (event) => {
         currentFilters.borough = event.target.value;
         if (currentFilters.borough === '') {
-            // Jika filter 'All Borough' dipilih kembali, reset semua filter terkait
             currentFilters.neighborhood = '';
             currentFilters.buildingClass = '';
             updateNeighborhoodFilter(rawData);
             updateBuildingClassFilter(rawData);
-            filter(rawData); // perbarui data dengan data awal
+            filter(rawData);
         } else {
-            // Jika filter borough lain dipilih, panggil fungsi filter() langsung
-            filter(rawData); // perbarui data dengan data awal
+            filter(rawData);
             updateNeighborhoodFilter(rawData);
             updateBuildingClassFilter(rawData);
         }
@@ -335,18 +323,12 @@ function processData(data) {
         ]
     };
 
-    // Sort buildingCategoryCounts by count in descending order
-    const sortedBuildingCategoryCounts = Object.entries(buildingCategoryCounts).sort((a, b) => b[1] - a[1]);
-    const sortedBuildingCategories = sortedBuildingCategoryCounts.map(entry => entry[0]);
-    const sortedBuildingCounts = sortedBuildingCategoryCounts.map(entry => entry[1]);
-
-    // Prepare data for Total Sales by Building Class Category (Chart 4)
     const barData = {
-        labels: sortedBuildingCategories,
+        labels: Object.keys(buildingCategoryCounts),
         datasets: [{
             label: null,
-            data: sortedBuildingCounts,
-            backgroundColor: sortedBuildingCategories.map(() => getRandomColor()),
+            data: Object.values(buildingCategoryCounts),
+            backgroundColor: Object.keys(buildingCategoryCounts).map(() => getRandomColor()),
         }]
     };
 
@@ -366,23 +348,26 @@ function processData(data) {
 
 function responsiveFontSize(chart) {
     let width = chart.width;
-    let titleFontSize, legendFontSize, scalesFontSize;
+    let titleFontSize, legendFontSize, ticksFontSize, scalesTitleFontSize, dataLabelsFontSize;
 
-    if (width >= 576 && width <= 1105) {
-        titleFontSize = 18;
-        legendFontSize = 14;
-        ticksFontSize = 12;
-        scalesTitleFontSize = 12;
-    } else if (width <= 575) {
-        titleFontSize = 15;
-        legendFontSize = 10;
-        ticksFontSize = 8;
-        scalesTitleFontSize = 8;
-    } else {
+    if (width > 1106) {
         titleFontSize = 20;
         legendFontSize = 16;
         ticksFontSize = 12;
         scalesTitleFontSize = 12;
+        dataLabelsFontSize = 14;
+    } else if (width >= 576 && width <= 1105) {
+        titleFontSize = 18;
+        legendFontSize = 14;
+        ticksFontSize = 12;
+        scalesTitleFontSize = 12;
+        dataLabelsFontSize = 12;
+    } else if (width <= 575) {
+        titleFontSize = 10;
+        legendFontSize = 8;
+        ticksFontSize = 5;
+        scalesTitleFontSize = 5;
+        dataLabelsFontSize = 8;
     }
 
     if (chart.options.plugins.title.font) {
@@ -414,6 +399,7 @@ function responsiveFontSize(chart) {
             }
         }
     }
+
     if (chart.options.scales) {
         if (chart.options.scales.x && chart.options.scales.x.title) {
             if (chart.options.scales.x.title.font) {
@@ -431,7 +417,16 @@ function responsiveFontSize(chart) {
             }
         }
     }
+
+    if (chart.options.plugins.datalabels) {
+        if (chart.options.plugins.datalabels.font) {
+            chart.options.plugins.datalabels.font.size = dataLabelsFontSize;
+        } else {
+            chart.options.plugins.datalabels.font = { size: dataLabelsFontSize };
+        }
+    }
 }
+
 
 function createLineChart(chartId, lineData) {
     if (lineChart) {
@@ -452,7 +447,7 @@ function createLineChart(chartId, lineData) {
                     text: 'Total Sales in Each Borough by Month',
                     color: 'white',
                     font: { family: 'Libre Baskerville', size: 20 },
-                    padding: { top: 10, bottom: 30 }
+                    padding: { top: 10, bottom: 10 }
                 },
                 legend: {
                     position: 'top',
@@ -472,6 +467,7 @@ function createLineChart(chartId, lineData) {
                     }
                 },
                 y: {
+                    beginAtZero: true,
                     ticks: {
                         color: 'white',
                         font: {
@@ -516,7 +512,7 @@ function createBarChart(chartId, barData) {
                     text: 'Total Sales by Building Class Category',
                     color: 'white',
                     font: { family: 'Libre Baskerville', size: 20 },
-                    padding: { top: 10, bottom: 30 }
+                    padding: { top: 10, bottom: 10 }
                 },
                 legend: { display: false }
             },
@@ -533,6 +529,7 @@ function createBarChart(chartId, barData) {
                     }
                 },
                 y: {
+                    beginAtZero: true,
                     ticks: { color: 'white', font: { size: 14 } },
                     title: {
                         display: true,
@@ -571,20 +568,36 @@ function createPieChart(chartId, priceRangeData) {
                     display: true,
                     text: 'Sales Distribution by Price Range',
                     color: '#ffff',
-                    font: { family: 'Libre Baskerville', size: 21 },
-                    padding: { top: 10, bottom: 30 }
+                    font: { family: 'Libre Baskerville', size: 20 },
+                    padding: { top: 10, bottom: 10 }
                 },
                 legend: {
                     position: 'bottom',
                     labels: { color: 'white', font: { size: 14 } }
+                },
+                datalabels: {
+                    formatter: (value, context) => {
+                        let sum = 0;
+                        const dataArr = context.chart.data.datasets[0].data;
+                        dataArr.forEach(data => sum += data);
+                        const percentage = (value * 100 / sum).toFixed(2) + "%";
+                        return percentage;
+                    },
+                    color: '#ffffff',
+                    font: { size: 14, weight: 'bold' },
+                    display: (context) => {
+                        const value = context.dataset.data[context.dataIndex];
+                        let sum = 0;
+                        context.dataset.data.forEach(data => sum += data);
+                        const percentage = (value * 100 / sum);
+                        return percentage >= 4;
+                    }
                 }
-            },
-            onResize: (chart) => {
-                responsiveFontSize(chart);
-                chart.update();
             }
-        }
+        },
+        plugins: [ChartDataLabels]
     });
+    responsiveFontSize(pieChart);
 }
 
 function createUnitsLineChart(chartId, salesData) {
@@ -606,7 +619,7 @@ function createUnitsLineChart(chartId, salesData) {
                     text: 'Sales of Residential and Commercial Units by Month',
                     color: 'white',
                     font: { family: 'Libre Baskerville', size: 20 },
-                    padding: { top: 10, bottom: 30 }
+                    padding: { top: 10, bottom: 10 }
                 },
                 legend: {
                     position: 'top',
@@ -626,6 +639,7 @@ function createUnitsLineChart(chartId, salesData) {
                     }
                 },
                 y: {
+                    beginAtZero: true,
                     ticks: { color: 'white', font: { size: 14 } },
                     title: {
                         display: true,
@@ -647,23 +661,48 @@ function createUnitsLineChart(chartId, salesData) {
 }
 
 function createTableChart(chartId, tableData) {
-    if (tableChart !== null) {
-        tableChart.clear();
+    if ($.fn.DataTable.isDataTable(`#${chartId}`)) {
+        $(`#${chartId}`).DataTable().destroy();
     }
+    $(`#${chartId}`).empty();
+
+    // Define column names mapping
+    const columnNames = {
+        neighborhood: 'Neighborhood',
+        totalSales: 'Sales Count'
+    };
+
+    // Get the keys from the first data object
+    const columns = Object.keys(tableData[0]);
+
+    // Create thead dynamically with renamed columns
+    let thead = '<thead><tr>';
+    columns.forEach(col => {
+        thead += `<th>${columnNames[col] || col}</th>`;
+    });
+    thead += '</tr></thead>';
+
+    // Append the thead to the table
+    $(`#${chartId}`).append(thead);
+
     const listColumn = Object.keys(tableData[0]).map(col => {
         return {
             data: col
         };
     });
     tableChart = new DataTable(`#${chartId}`, {
+        caption: "Table of Sales Count by Neighborhood",
         columns: listColumn,
         data: tableData,
-        responsive: true
+        responsive: true,
+        pagingType: "simple_numbers",
+        paging: true,
+        info: true
     });
 }
 
 function getRandomColor() {
-    const letters = '0123456789ABCDEF';
+    const letters = 'ABCDEF0123456789';
     let color = '#';
     for (let i = 0; i < 6; i++) {
         color += letters[Math.floor(Math.random() * 16)];
@@ -681,8 +720,7 @@ function scrollFunction() {
     }
 }
 
-// When the user clicks on the button, scroll to the top of the document
 function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
