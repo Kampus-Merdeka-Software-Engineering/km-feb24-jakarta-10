@@ -1,9 +1,14 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
 }
 
 .body-background {
     font-family: "Libre Baskerville";
+    background-color: #3e4551;
 }
 
 header {
@@ -13,6 +18,7 @@ header {
     height: 250px;
     width: 100%;
     position: relative;
+    border-bottom: 2px solid #0a142f;
 }
 
 .overlay {
@@ -52,6 +58,7 @@ header h1 {
     font-size: 3em;
     justify-content: center;
     line-height: 1px;
+    letter-spacing: 2.8px;
     padding-bottom: 20px;
     text-shadow: -3px -3px 0 navy, 3px -3px 0 navy, -3px 3px 0 navy, 3px 3px 0 navy;
 }
@@ -91,6 +98,17 @@ header p {
     font-size: 15px;
     color: #ffffff;
     text-decoration: none;
+}
+
+#table,
+#pie {
+    scroll-margin-top: 60px;
+}
+
+#line1,
+#line2,
+#bar {
+    scroll-margin-top: 40px;
 }
 
 .dropdown-content::before {
@@ -220,7 +238,7 @@ header p {
 }
 
 .col-6 {
-    width: 49%;
+    width: 50%;
     box-sizing: border-box;
 }
 
@@ -232,9 +250,9 @@ header p {
 .chart-container {
     background-color: #0a142f;
     border-radius: 10px;
-    padding: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
     color: #ffffff;
-    margin-bottom: 23px;
     height: 480px;
     justify-content: center;
     align-items: center;
@@ -243,53 +261,52 @@ header p {
 }
 
 .chart-container:hover {
-    transform: scale(1.03);
+    transform: scale(1.01);
 }
 
 .pie-container {
     background-color: #0a142f;
-    margin-bottom: 23px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
+    margin-right: 1.25rem;
     border-radius: 10px;
     color: #ffffff;
-    margin-right: 23px;
-    padding: 10px;
     height: 480px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 10px 20px;
     transition: transform 0.5s ease;
 }
 
 .pie-container:hover {
-    transform: scale(1.03);
+    transform: scale(1.01);
 }
 
 .table-container {
     background-color: #0a142f;
     border-radius: 10px;
     color: #ffffff;
-    padding: 15px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
     height: 480px;
     font-size: 12px;
-    z-index: 0;
     overflow-x: hidden;
     transition: transform 0.5s ease;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 10px 20px;
 }
 
 .table-container:hover {
-    transform: scale(1.03);
+    transform: scale(1.01);
 }
 
 #tableData {
-    width: 80%;
-    margin-top: 10px;
-    margin-bottom: 10px;
     overflow: scroll;
 }
 
 #tableChart caption {
     font-family: "Libre Baskerville";
-    font-size: 15px;
+    font-size: 20px;
+    padding-top: 20px;
     padding-bottom: 10px;
+    font-weight: bold;
 }
 
 #tableChart thead {
@@ -312,7 +329,6 @@ header p {
     font-size: 10px;
     text-align: center;
     color: #0a142f;
-    width: 150px;
 }
 
 #tableChart tbody tr:nth-child(even) {
@@ -340,7 +356,6 @@ div.dt-container .dt-paging .dt-paging-button.disabled:active {
 div.dt-container .dt-layout-row .dt-input {
     color: #ffffff !important;
     background-color: #1e2a47;
-
 }
 
 .table-container::-webkit-scrollbar {
@@ -359,19 +374,15 @@ div.dt-container .dt-layout-row .dt-input {
     background-color: #0a142f;
 }
 
-
 #lineChart,
 #unitsLineChart,
 #barChart {
     height: 450px;
-    scroll-margin-top: 100px;
 }
 
 #pieChart {
     height: 450px;
-    scroll-margin-top: 30px;
 }
-
 
 /**Our teams**/
 .member-team {
@@ -383,7 +394,7 @@ div.dt-container .dt-layout-row .dt-input {
 }
 
 .wrapper {
-    background: #fff;
+    background: #fff9f9;
     width: 1200px;
     border-radius: 20px;
     padding: 20px;
@@ -451,14 +462,14 @@ div.dt-container .dt-layout-row .dt-input {
     color: #ffff;
     opacity: 0.6;
     letter-spacing: 2.8px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .req {
     font-family: "Libre Baskerville", serif;
     font-size: 50px;
     color: #ffff;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .visual {
@@ -510,6 +521,11 @@ div.dt-container .dt-layout-row .dt-input {
 
 .footer-icon img {
     width: 60px;
+    transition: transform 0.3s ease;
+}
+
+.footer-icon img:hover {
+    transform: scale(1.2);
 }
 
 #myBtn {
@@ -532,4 +548,475 @@ div.dt-container .dt-layout-row .dt-input {
     background-color: #ffffff;
     color: #0a142f;
     border: 1px solid #0a142f;
+}
+
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+@media screen and (min-width: 576px) and (max-width: 1105px) {
+    header {
+        height: 230px;
+    }
+
+    .header-logo {
+        gap: 20px;
+        padding-top: 10px;
+        padding-right: 15px;
+    }
+
+    .revou {
+        width: 40px;
+    }
+
+    .km,
+    .msib {
+        width: 60px;
+        height: 40px;
+    }
+
+    header h1 {
+        font-size: 2em;
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+
+    header p {
+        font-size: 25px;
+    }
+
+    .nav-item a {
+        font-size: 15px;
+    }
+
+    .grafik-section {
+        margin: 0 20px 10px 20px;
+    }
+
+    .dashboard {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 15px;
+        align-items: center;
+        margin: 0;
+    }
+
+    .filter {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 0;
+    }
+
+    #boroughFilter {
+        width: 100px;
+        font-size: 10px;
+    }
+
+    #neighborhoodFilter {
+        width: 130px;
+        font-size: 10px;
+    }
+
+    #buildingClassFilter {
+        width: 180px;
+        font-size: 10px;
+    }
+
+    .recordcount {
+        padding: 10px;
+    }
+
+    .value {
+        font-size: 18px;
+    }
+
+    [class*="col-"] {
+        width: 100%;
+    }
+
+    .chart-container {
+        height: 300px;
+        padding: 5px;
+    }
+
+    .pie-container {
+        height: 300px;
+        margin-right: 0;
+        padding: 5px;
+    }
+
+    .table-container {
+        height: 400px;
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    #pieChart {
+        scroll-margin-top: 180px;
+    }
+
+    #tableChart {
+        width: auto !important;
+        scroll-margin-top: 100px;
+    }
+
+    div.dt-container select.dt-input {
+        padding: 0;
+    }
+
+    div.dt-container .dt-search input {
+        padding: 0;
+    }
+
+    #tableChart caption {
+        font-size: 14px;
+        padding-top: 0;
+    }
+
+    #tableChart thead th {
+        padding: 5px;
+    }
+
+    #tableChart tbody td {
+        font-size: 10px;
+        padding: 4px;
+    }
+
+    div.dt-container .dt-paging .dt-paging-button {
+        font-size: 12px;
+    }
+
+    .image-member {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 13px;
+    }
+
+    .h4-team-member {
+        font-size: 12px;
+        margin: 7px;
+        width: 100px;
+    }
+
+    .background {
+        padding: 40px 40px;
+    }
+
+    .upskill {
+        font-size: 10px;
+    }
+
+    .req {
+        font-size: 40px;
+    }
+
+    .visual {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .button button {
+        font-size: 15px;
+        font-weight: 500px;
+        padding: 15px 30px;
+        border-radius: 30px;
+        margin-bottom: 20px;
+    }
+
+    .cr {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+
+    .line {
+        margin-bottom: 15px;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 15px;
+        padding: 0;
+    }
+
+    .footer-icon {
+        gap: 20px;
+    }
+
+    .footer-icon img {
+        width: 40px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    header {
+        height: 180px;
+    }
+
+    .header-logo {
+        gap: 10px;
+        padding-top: 10px;
+        padding-right: 15px;
+    }
+
+    .revou {
+        width: 40px;
+    }
+
+    .km,
+    .msib {
+        width: 60px;
+        height: 40px;
+    }
+
+    header h1 {
+        font-size: 25px;
+        padding-top: 10px;
+    }
+
+    header p {
+        font-size: 20px;
+    }
+
+    .header-nav {
+        padding-bottom: 0;
+    }
+
+    .nav-item a {
+        font-size: 10px;
+    }
+
+    .grafik-section {
+        margin: 0;
+    }
+
+    .dashboard {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 15px;
+        align-items: center;
+        margin: 0;
+    }
+
+    .filter {
+        display: flex;
+        float: right;
+        gap: 5px;
+        margin-bottom: 0;
+    }
+
+    #boroughFilter {
+        width: 85px;
+        height: 25px;
+        font-size: 8px;
+    }
+
+    #neighborhoodFilter {
+        width: 110px;
+        height: 25px;
+        font-size: 8px;
+    }
+
+    #buildingClassFilter {
+        width: 146px;
+        height: 25px;
+        font-size: 8px;
+    }
+
+    .recordcount {
+        padding: 5px;
+    }
+
+    .value {
+        font-size: 12px;
+        padding-bottom: 5px;
+    }
+
+    .text {
+        font-size: 8px;
+    }
+
+    [class*="col-"] {
+        width: 100%;
+    }
+
+    .chart-container {
+        height: 200px;
+        padding: 5px;
+    }
+
+    .pie-container {
+        height: 200px;
+        margin-right: 0;
+        padding: 5px;
+    }
+
+    .table-container {
+        height: 295px;
+        font-size: 8px;
+        padding-top: 5px;
+    }
+
+    #pieChart {
+        scroll-margin-top: 180px;
+    }
+
+    #tableChart {
+        scroll-margin-top: 100px;
+    }
+
+    #unitsLineChart {
+        scroll-margin-top: 200px;
+    }
+
+    div.dt-container select.dt-input {
+        padding: 0;
+        font-size: 8px;
+    }
+
+    div.dt-container .dt-search input {
+        padding: 0;
+    }
+
+    div.dt-container div.dt-layout-row.dt-layout-table div.dt-layout-cell {
+        width: 100%;
+    }
+
+    #tableChart {
+        width: auto !important;
+    }
+
+    #tableChart caption {
+        font-size: 10px;
+        padding-top: 0;
+    }
+
+    #tableChart thead th {
+        font-size: 10px;
+        padding: 4px;
+    }
+
+    #tableChart tbody td {
+        font-size: 8px;
+        padding: 2px;
+    }
+
+    div.dt-container .dt-paging .dt-paging-button {
+        font-size: 8px;
+    }
+
+    .table-container::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .dt-container .dt-search {
+        margin-top: 0;
+    }
+
+    .image-member {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 8px;
+    }
+
+    .h4-team-member {
+        font-size: 10px;
+        margin: 7px;
+        width: 100px;
+    }
+
+    .background {
+        padding: 10px 10px;
+    }
+
+    .upskill {
+        font-size: 10px;
+    }
+
+    .req {
+        font-size: 40px;
+    }
+
+    .visual {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .button button {
+        font-size: 15px;
+        font-weight: 500px;
+        padding: 15px 30px;
+        border-radius: 30px;
+        margin-bottom: 20px;
+    }
+
+    .cr {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+
+    .line {
+        margin-bottom: 15px;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 15px;
+        padding: 0;
+    }
+
+    .footer-icon {
+        gap: 20px;
+    }
+
+    .footer-icon img {
+        width: 40px;
+    }
+
+    #myBtn {
+        bottom: 10px;
+        right: 7px;
+        padding: 8px;
+        border-radius: 5px;
+    }
 }
