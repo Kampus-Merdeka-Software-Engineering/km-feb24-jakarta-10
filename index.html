@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NYC Property Sales</title>
+    <title>New York City Property Sales</title>
+    <link rel="icon" href="https://logos-world.net/wp-content/uploads/2023/02/NYC-Logo.png">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Actor&display=swap" rel="stylesheet">
@@ -24,6 +24,9 @@
 
 <body>
     <div class="body-background">
+        <div id="spinner" class="spinner-container">
+            <div class="spinner"></div>
+        </div>
         <header class="main-header">
             <div class="overlay">
                 <div class="header-logo">
@@ -40,11 +43,11 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="dropbtn">Charts</a>
                             <div class="dropdown-content">
-                                <a href="#lineChart">Total Sales by Month</a>
-                                <a href="#pieChart">Price Range</a>
-                                <a href="#tableChart">Table of Sales Count</a>
-                                <a href="#unitsLineChart">Property Type</a>
-                                <a href="#barChart">Total Sales by Category</a>
+                                <a href="#line1">Total Sales by Month</a>
+                                <a href="#pie">Price Range</a>
+                                <a href="#table">Table of Sales Count</a>
+                                <a href="#line2">Property Type</a>
+                                <a href="#bar">Total Sales by Category</a>
                             </div>
                         </div>
                         <div class="nav-item"><a href="#ourteams">Our Teams</a></div>
@@ -61,7 +64,7 @@
         </header>
 
         <section class="main-section">
-            <div class="dashboard" id="">
+            <div class="dashboard">
                 <div class="recordcount">
                     <span class="value" id="recordCountValue">0</span> <br>
                     <span class="text">Record Count</span>
@@ -84,35 +87,39 @@
             <div class="grafik-section">
                 <div class="main-content">
                     <div class="row">
-                        <div class="chart-container col-12">
-                            <div class="lineChart">
+                        <div class="col-12" id="line1">
+                            <div class="chart-container">
                                 <canvas id="lineChart"></canvas>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="pie-container col-6">
-                            <div class="pieChart">
+                        <div class="col-6" id="pie">
+                            <div class="pie-container">
                                 <canvas id="pieChart"></canvas>
                             </div>
                         </div>
-                        <div class="table-container col-6">
-                            <table id="tableChart" style="width: 80%;">
-                                <thead></thead>
-                                <tbody></tbody>
-                            </table>
+                        <div class="col-6" id="table">
+                            <div class="table-container">
+                                <div class="tableChart">
+                                    <table id="tableChart">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="chart-container col-12">
-                            <div class="unitsLineChart">
+                        <div class="col-12" id="line2">
+                            <div class="chart-container">
                                 <canvas id="unitsLineChart"></canvas>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="chart-container col-12">
-                            <div class="barChart">
+                        <div class="col-12" id="bar">
+                            <div class="chart-container">
                                 <canvas id="barChart"></canvas>
                             </div>
                         </div>
