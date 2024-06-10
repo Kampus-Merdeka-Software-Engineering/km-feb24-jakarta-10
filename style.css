@@ -163,7 +163,7 @@ header p {
     margin: 0 50px 10px 50px;
 }
 
-.dashboard {
+.recordcount-and-filter {
     display: flex;
     justify-content: space-between;
     margin: 20px;
@@ -629,7 +629,7 @@ div.dt-container .dt-layout-row .dt-input {
         margin: 0 20px 10px 20px;
     }
 
-    .dashboard {
+    .recordcount-and-filter {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
@@ -831,7 +831,7 @@ div.dt-container .dt-layout-row .dt-input {
         margin: 0;
     }
 
-    .dashboard {
+    .recordcount-and-filter {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
