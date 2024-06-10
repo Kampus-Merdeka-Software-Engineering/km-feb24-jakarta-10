@@ -15,7 +15,7 @@ To use the dashboard, follow these steps:
 - Responsive design
 
 ## Screenshots
-![Dashboard Screenshot](link_to_screenshot_image)
+![Header](assets/screenshoot/header.png)
 
 ## Demo
 Check out the live demo [here](https://km-feb24-jakarta-10.vercel.app/).
