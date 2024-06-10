@@ -5,11 +5,11 @@ const currentFilters = {
     neighborhood: '',
     buildingClass: '',
 };
-let lineChart = null;
-let barChart = null;
-let pieChart = null;
-let unitsLineChart = null;
-let tableChart = null;
+let lineChart;
+let barChart;
+let pieChart;
+let unitsLineChart;
+let tableChart;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('spinner').style.display = 'flex';
@@ -33,7 +33,7 @@ function filter(data) {
 
     createLineChart('lineChart', salesData.lineData);
     createPieChart('pieChart', salesData.priceRangeData);
-    createUnitsLineChart('unitsLineChart', salesData);
+    createUnitsLineChart('unitsLineChart', salesData.lineDatat);
     createBarChart('barChart', salesData.barData);
     createTableChart('tableChart', salesData.tableData);
 }
@@ -181,28 +181,6 @@ function updateBuildingClassFilter(data) {
     }
 }
 
-function updateBuildingClassFilter(data) {
-    const buildingClassFilter = document.getElementById('buildingClassFilter');
-    buildingClassFilter.innerHTML = '<option value="">All Building Class Category</option>';
-
-    const buildingClassSet = new Set();
-    data.forEach(item => {
-        if ((currentFilters.borough === '' || item.BOROUGH === currentFilters.borough) &&
-            (currentFilters.neighborhood === '' || item.NEIGHBORHOOD === currentFilters.neighborhood)) {
-            buildingClassSet.add(item.BUILDING_CLASS_CATEGORY);
-        }
-    });
-
-    const sortedBuildingClasses = Array.from(buildingClassSet).sort();
-
-    sortedBuildingClasses.forEach(buildingClass => {
-        const option = document.createElement('option');
-        option.value = buildingClass;
-        option.textContent = buildingClass;
-        buildingClassFilter.appendChild(option);
-    });
-}
-
 function processData(data) {
     const filteredData = rawData.filter(item => {
         return (currentFilters.borough === '' || item.BOROUGH === currentFilters.borough) &&
@@ -211,7 +189,6 @@ function processData(data) {
     });
     const salesData = { lineData: {}, lineDatat: {}, barData: {}, priceRangeData: {}, tableData: {} };
     const salesByBorough = {};
-    const salesCounts = {};
     const buildingCategoryCounts = {};
     const salesByNeighborhood = {};
     const priceRanges = {
@@ -224,27 +201,21 @@ function processData(data) {
 
     const residentialUnits = {};
     const commercialUnits = {};
-
-    filteredData.forEach(item => {
-        const neighborhood = item.NEIGHBORHOOD;
-        const borough = item.BOROUGH;
-        const category = item.BUILDING_CLASS_CATEGORY;
-        const saleDate = new Date(item.SALE_DATE);
-        const salePrice = parseFloat(item.SALE_PRICE);
-        const monthYear = `${saleDate.getFullYear()}-${String(saleDate.getMonth() + 1).padStart(2, '0')}`;
-        const resUnits = parseInt(item.RESIDENTIAL_UNITS, 10) || 0;
-        const comUnits = parseInt(item.COMMERCIAL_UNITS, 10) || 0;
-
-        // Process data for Total Sales in Each Borough by Month (Chart 1)
-        if (!salesByBorough[borough]) {
-            salesByBorough[borough] = {};
+    const initializeNestedObject = (obj, key, subKey, initialValue = 0) => {
+        if (!obj[key]) {
+            obj[key] = {};
         }
-        if (!salesByBorough[borough][monthYear]) {
-            salesByBorough[borough][monthYear] = 0;
+        if (!obj[key][subKey]) {
+            obj[key][subKey] = initialValue;
         }
+    };
+
+    const processSalesByBorough = (borough, monthYear) => {
+        initializeNestedObject(salesByBorough, borough, monthYear);
         salesByBorough[borough][monthYear]++;
+    };
 
-        // Process data for Sales Distribution by Price Range (Chart 2)
+    const processPriceRange = (salePrice) => {
         if (salePrice >= 0 && salePrice <= 20) {
             priceRanges["$0 - $20"]++;
         } else if (salePrice > 20 && salePrice <= 100000) {
@@ -256,8 +227,9 @@ function processData(data) {
         } else if (salePrice > 1000000000) {
             priceRanges["> $1.000.000.000"]++;
         }
+    };
 
-        // Process data for Sales of Residential and Commercial Units by Month (Chart 3)
+    const processUnitsByMonth = (monthYear, resUnits, comUnits) => {
         if (!residentialUnits[monthYear]) {
             residentialUnits[monthYear] = 0;
         }
@@ -267,20 +239,40 @@ function processData(data) {
             commercialUnits[monthYear] = 0;
         }
         commercialUnits[monthYear] += comUnits;
+    };
 
-        // Process data for Total Sales by Building Class Category (Chart 4)
+    const processBuildingCategory = (category) => {
         if (!buildingCategoryCounts[category]) {
             buildingCategoryCounts[category] = 0;
         }
         buildingCategoryCounts[category]++;
+    };
 
-        // Process data for Table of Total Sales by Neighborhood (Chart 5)
+    const processSalesByNeighborhood = (neighborhood) => {
         if (!salesByNeighborhood[neighborhood]) {
             salesByNeighborhood[neighborhood] = 1;
         } else {
             salesByNeighborhood[neighborhood]++;
         }
+    };
+
+    filteredData.forEach(item => {
+        const neighborhood = item.NEIGHBORHOOD;
+        const borough = item.BOROUGH;
+        const category = item.BUILDING_CLASS_CATEGORY;
+        const saleDate = new Date(item.SALE_DATE);
+        const salePrice = parseFloat(item.SALE_PRICE);
+        const monthYear = `${saleDate.getFullYear()}-${String(saleDate.getMonth() + 1).padStart(2, '0')}`;
+        const resUnits = parseInt(item.RESIDENTIAL_UNITS, 10) || 0;
+        const comUnits = parseInt(item.COMMERCIAL_UNITS, 10) || 0;
+
+        processSalesByBorough(borough, monthYear);
+        processPriceRange(salePrice);
+        processUnitsByMonth(monthYear, resUnits, comUnits);
+        processBuildingCategory(category);
+        processSalesByNeighborhood(neighborhood);
     });
+
 
     // Prepare data for Total Sales in Each Borough by Month (Chart 1)
     const labels = Array.from(new Set(filteredData.map(item => {
@@ -337,7 +329,7 @@ function processData(data) {
         }]
     };
 
-    // Prepare data for Table of Total Sales by Neighborhood (Chart 5)
+    // Prepare data for Table of Sales Count by Neighborhood (Chart 5)
     const tableData = Object.keys(salesByNeighborhood).map(neighborhood => ({
         neighborhood: neighborhood,
         totalSales: salesByNeighborhood[neighborhood]
@@ -351,41 +343,25 @@ function processData(data) {
     return salesData;
 }
 
+function setResponsiveFontSizes() {
+    let width = window.innerWidth;
+    if (width <= 575) {
+        return { title: 10, legend: 5, ticks: 5, scalesTitle: 5, datalabel: 5 };
+    } else if (width <= 1105) {
+        return { title: 12, legend: 8, ticks: 8, scalesTitle: 8, datalabel: 8 };
+    } else {
+        return { title: 20, legend: 12, ticks: 10, scalesTitle: 10, datalabel: 10 };
+    }
+}
+
 function createLineChart(chartId, lineData) {
     if (lineChart) {
         lineChart.destroy();
     }
-    const chartContainer = document.getElementById(chartId).parentNode;
 
     const ctx = document.getElementById(chartId).getContext('2d');
 
-    let titleFontSize, legendFontSize, ticksFontSize, scalesTitleFontSize;
-
-    const setResponsiveFontSizes = () => {
-        let width = window.innerWidth;
-        if (width <= 575) {
-            titleFontSize = 10;
-            legendFontSize = 5;
-            ticksFontSize = 5;
-            scalesTitleFontSize = 5;
-        } else if (width <= 1105) {
-            titleFontSize = 12;
-            legendFontSize = 8;
-            ticksFontSize = 8;
-            scalesTitleFontSize = 8;
-        } else {
-            titleFontSize = 20;
-            legendFontSize = 12;
-            ticksFontSize = 10;
-            scalesTitleFontSize = 10;
-        }
-    };
-
-    setResponsiveFontSizes();
-
-    window.addEventListener('resize', () => {
-        createLineChart(chartId, lineData);
-    });
+    const { title, legend, ticks, scalesTitle } = setResponsiveFontSizes();
 
     lineChart = new Chart(ctx, {
         type: 'line',
@@ -398,24 +374,24 @@ function createLineChart(chartId, lineData) {
                     display: true,
                     text: 'Total Sales in Each Borough by Month',
                     color: '#ffffff',
-                    font: { family: 'Libre Baskerville', size: titleFontSize },
+                    font: { family: 'Libre Baskerville', size: title },
                     padding: { top: 10, bottom: 10 }
                 },
                 legend: {
                     position: 'top',
-                    labels: { color: '#ffffff', font: { family: 'Libre Baskerville', size: legendFontSize } }
+                    labels: { color: '#ffffff', font: { family: 'Libre Baskerville', size: legend } }
                 }
             },
             scales: {
                 x: {
-                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticksFontSize } },
+                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticks } },
                     title: {
                         display: true,
                         text: 'Year-Month',
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: scalesTitleFontSize
+                            size: scalesTitle
                         }
                     }
                 },
@@ -425,7 +401,7 @@ function createLineChart(chartId, lineData) {
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: ticksFontSize
+                            size: ticks
                         }
                     },
                     title: {
@@ -434,7 +410,7 @@ function createLineChart(chartId, lineData) {
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: scalesTitleFontSize
+                            size: scalesTitle
                         }
                     }
                 }
@@ -447,37 +423,10 @@ function createBarChart(chartId, barData) {
     if (barChart) {
         barChart.destroy();
     }
-    const chartContainer = document.getElementById(chartId).parentNode;
 
     const ctx = document.getElementById(chartId).getContext('2d');
 
-    let titleFontSize, legendFontSize, ticksFontSize, scalesTitleFontSize;
-
-    const setResponsiveFontSizes = () => {
-        let width = window.innerWidth;
-        if (width <= 575) {
-            titleFontSize = 10;
-            legendFontSize = 5;
-            ticksFontSize = 5;
-            scalesTitleFontSize = 5;
-        } else if (width <= 1105) {
-            titleFontSize = 12;
-            legendFontSize = 8;
-            ticksFontSize = 8;
-            scalesTitleFontSize = 8;
-        } else {
-            titleFontSize = 20;
-            legendFontSize = 12;
-            ticksFontSize = 10;
-            scalesTitleFontSize = 10;
-        }
-    };
-
-    setResponsiveFontSizes();
-
-    window.addEventListener('resize', () => {
-        createBarChart(chartId, barData);
-    });
+    const { title, ticks, scalesTitle } = setResponsiveFontSizes();
 
     barChart = new Chart(ctx, {
         type: 'bar',
@@ -490,34 +439,34 @@ function createBarChart(chartId, barData) {
                     display: true,
                     text: 'Total Sales by Building Class Category',
                     color: '#ffffff',
-                    font: { family: 'Libre Baskerville', size: titleFontSize },
+                    font: { family: 'Libre Baskerville', size: title },
                     padding: { top: 10, bottom: 10 }
                 },
                 legend: { display: false }
             },
             scales: {
                 x: {
-                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticksFontSize } },
+                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticks } },
                     title: {
                         display: true,
                         text: 'Building Class Category',
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: scalesTitleFontSize
+                            size: scalesTitle
                         }
                     }
                 },
                 y: {
                     beginAtZero: true,
-                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticksFontSize } },
+                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticks } },
                     title: {
                         display: true,
                         text: 'Total Sales',
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: scalesTitleFontSize
+                            size: scalesTitle
                         },
                     }
                 }
@@ -526,45 +475,18 @@ function createBarChart(chartId, barData) {
     });
 }
 
-function createUnitsLineChart(chartId, salesData) {
+function createUnitsLineChart(chartId, lineDatat) {
     if (unitsLineChart) {
         unitsLineChart.destroy();
     }
-    const chartContainer = document.getElementById(chartId).parentNode;
 
     const ctx = document.getElementById(chartId).getContext('2d');
 
-    let titleFontSize, legendFontSize, ticksFontSize, scalesTitleFontSize;
-
-    const setResponsiveFontSizes = () => {
-        let width = window.innerWidth;
-        if (width <= 575) {
-            titleFontSize = 10;
-            legendFontSize = 5;
-            ticksFontSize = 5;
-            scalesTitleFontSize = 5;
-        } else if (width <= 1105) {
-            titleFontSize = 12;
-            legendFontSize = 8;
-            ticksFontSize = 8;
-            scalesTitleFontSize = 8;
-        } else {
-            titleFontSize = 20;
-            legendFontSize = 12;
-            ticksFontSize = 10;
-            scalesTitleFontSize = 10;
-        }
-    };
-
-    setResponsiveFontSizes();
-
-    window.addEventListener('resize', () => {
-        createUnitsLineChart(chartId, salesData);
-    });
+    const { title, legend, ticks, scalesTitle } = setResponsiveFontSizes();
 
     unitsLineChart = new Chart(ctx, {
         type: 'line',
-        data: salesData.lineData,
+        data: lineDatat,
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -573,37 +495,37 @@ function createUnitsLineChart(chartId, salesData) {
                     display: true,
                     text: 'Sales of Residential and Commercial Units by Month',
                     color: '#ffffff',
-                    font: { family: 'Libre Baskerville', size: titleFontSize },
+                    font: { family: 'Libre Baskerville', size: title },
                     padding: { top: 10, bottom: 10 }
                 },
                 legend: {
                     position: 'top',
-                    labels: { color: '#ffffff', font: { family: 'Libre Baskerville', size: legendFontSize } }
+                    labels: { color: '#ffffff', font: { family: 'Libre Baskerville', size: legend } }
                 }
             },
             scales: {
                 x: {
-                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticksFontSize } },
+                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticks } },
                     title: {
                         display: true,
                         text: 'Year-Month',
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: scalesTitleFontSize
+                            size: scalesTitle
                         }
                     }
                 },
                 y: {
                     beginAtZero: true,
-                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticksFontSize } },
+                    ticks: { color: '#ffffff', font: { family: 'Libre Baskerville', size: ticks } },
                     title: {
                         display: true,
                         text: 'Units Sold',
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: scalesTitleFontSize
+                            size: scalesTitle
                         }
                     }
                 }
@@ -616,28 +538,9 @@ function createPieChart(chartId, priceRangeData) {
     if (pieChart) {
         pieChart.destroy();
     }
-
-    const chartContainer = document.getElementById(chartId).parentNode;
     const ctx = document.getElementById(chartId).getContext('2d');
 
-    let titleFontSize, legendFontSize, datalabelFontSize;
-    if (window.innerWidth <= 575) {
-        titleFontSize = Math.max(10);
-        legendFontSize = Math.max(5);
-        datalabelFontSize = Math.max(5);
-    } else if (window.innerWidth >= 576 && window.innerWidth <= 1105) {
-        titleFontSize = Math.max(12);
-        legendFontSize = Math.max(8);
-        datalabelFontSize = Math.max(8);
-    } else {
-        titleFontSize = Math.max(20);
-        legendFontSize = Math.max(12);
-        datalabelFontSize = Math.max(12);
-    }
-
-    window.addEventListener('resize', () => {
-        createPieChart(chartId, priceRangeData);
-    });
+    const { title, legend, datalabel } = setResponsiveFontSizes();
 
     pieChart = new Chart(ctx, {
         type: 'pie',
@@ -652,7 +555,7 @@ function createPieChart(chartId, priceRangeData) {
                     color: '#ffffff',
                     font: {
                         family: 'Libre Baskerville',
-                        size: titleFontSize
+                        size: title
                     },
                     padding: {
                         top: 10,
@@ -665,14 +568,15 @@ function createPieChart(chartId, priceRangeData) {
                         color: '#ffffff',
                         font: {
                             family: 'Libre Baskerville',
-                            size: legendFontSize
+                            size: legend
                         }
                     }
                 },
                 datalabels: {
                     formatter: (value, context) => {
                         let sum = 0;
-                        const dataArr = context.chart.data.datasets[0].data;
+                        const
+                            dataArr = context.chart.data.datasets[0].data;
                         dataArr.forEach(data => sum += data);
                         const percentage = (value * 100 / sum).toFixed(2) + "%";
                         return percentage;
@@ -680,7 +584,7 @@ function createPieChart(chartId, priceRangeData) {
                     color: 'black',
                     font: {
                         family: 'Libre Baskerville',
-                        size: datalabelFontSize,
+                        size: datalabel,
                         weight: 'bolder',
                     },
                     display: (context) => {
@@ -698,6 +602,46 @@ function createPieChart(chartId, priceRangeData) {
         plugins: [ChartDataLabels]
     });
 }
+
+window.addEventListener('resize', () => {
+    const { title, legend, ticks, scalesTitle, datalabel } = setResponsiveFontSizes();
+
+    if (lineChart) {
+        lineChart.options.plugins.title.font.size = title;
+        lineChart.options.plugins.legend.labels.font.size = legend;
+        lineChart.options.scales.x.ticks.font.size = ticks;
+        lineChart.options.scales.x.title.font.size = scalesTitle;
+        lineChart.options.scales.y.ticks.font.size = ticks;
+        lineChart.options.scales.y.title.font.size = scalesTitle;
+        lineChart.update();
+    }
+
+    if (barChart) {
+        barChart.options.plugins.title.font.size = title;
+        barChart.options.scales.x.ticks.font.size = ticks;
+        barChart.options.scales.x.title.font.size = scalesTitle;
+        barChart.options.scales.y.ticks.font.size = ticks;
+        barChart.options.scales.y.title.font.size = scalesTitle;
+        barChart.update();
+    }
+
+    if (unitsLineChart) {
+        unitsLineChart.options.plugins.title.font.size = title;
+        unitsLineChart.options.plugins.legend.labels.font.size = legend;
+        unitsLineChart.options.scales.x.ticks.font.size = ticks;
+        unitsLineChart.options.scales.x.title.font.size = scalesTitle;
+        unitsLineChart.options.scales.y.ticks.font.size = ticks;
+        unitsLineChart.options.scales.y.title.font.size = scalesTitle;
+        unitsLineChart.update();
+    }
+
+    if (pieChart) {
+        pieChart.options.plugins.title.font.size = title;
+        pieChart.options.plugins.legend.labels.font.size = legend;
+        pieChart.options.plugins.datalabels.font.size = datalabel;
+        pieChart.update();
+    }
+});
 
 function createTableChart(chartId, tableData) {
     if ($.fn.DataTable.isDataTable(`#${chartId}`)) {
@@ -739,7 +683,6 @@ function createTableChart(chartId, tableData) {
         order: [[orderColumnIndex, 'desc']]
     });
 }
-
 
 function getRandomColor() {
     const letters = 'ABCDEF0123456789';
