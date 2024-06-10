@@ -15,7 +15,23 @@ To use the dashboard, follow these steps:
 - Responsive design
 
 ## Screenshots
+- Header
 ![Header](assets/screenshoot/header.png)
+
+- Record Count and Filters
+![Record Count and Filters](assets/screenshoot/filter.png)
+
+- Dashboard
+![Dashboard](assets/screenshoot/totalSales.png)
+![Dashboard](assets/screenshoot/pieandtable.png)
+![Dashboard](assets/screenshoot/propertyType.png)
+![Dashboard](assets/screenshoot/totalSalesbyCategory.png)
+
+- Member Team 10
+![Member Team 10](assets/screenshoot/teams.png)
+
+- Footer
+![Footer](assets/screenshoot/footer.png)
 
 ## Demo
 Check out the live demo [here](https://km-feb24-jakarta-10.vercel.app/).
